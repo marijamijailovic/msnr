@@ -3,7 +3,7 @@
 
 Kao sto smo rekli, Front end je prva faza u kojoj se izvorni kod pretvara u Core jezik. Sastoji se od :
 	 \begin{enumerate}
-	 	\item Parsiranja
+	 	\item Parsiranja(eng. \emph{Parser})
 	 	\item Promena imena(eng. \emph{Rename}) 
 	 	\item Provera tipa(eng. \emph{Typecheck})
 	 	\item Prečišćavanja(eng. \emph{Desugaring})
@@ -13,9 +13,17 @@ Kao sto smo rekli, Front end je prva faza u kojoj se izvorni kod pretvara u Core
 \subsection{Parsiranje}
 \label{subsec:podnaslovParse}
 
-Pravljenje preciznog parsera u konkretnom jeziku je jako teško. GHC-ov parser se služi sledećim principom : Često se parsira “previše velikodušno”,  a zatim odbacujemo loše slučajeve.
-Paterni su parsirani kao izrazi i transformisani iz 
-HsExpr.HsExp u HsPat.HsPat. Izraz kao sto je [ x | x <- xs] koji ne izgleda kao patern je odbijen.
+Pravljenje preciznog parsera u konkretnom jeziku je jako teško. GHC-ov parser se služi sledećim principom : 
+
+\textit{Često se parsira “previše velikodušno”,  a zatim odbacujemo loše slučajeve.}
+
+\textbf{Paterni} su parsirani kao izrazi i transformisani iz 
+\textit{HsExpr.HsExp} u\textit{ HsPat.HsPat}. Izraz kao što je
+\begin{verbatim}
+	[ x | x <- xs]
+\end{verbatim}  
+koji ne izgleda kao patern je odbijen.
+
 Ponekad “previše velikodušno” parsiranje izvršava samo “renamer”. Na primer:
 Infkiksni operatori  su parsirani kao da su svi levo asocijativni. “Renamer” koristi dekleracije ispravnosti za ponovno povezivanje sintaksnog stabla. Dobra karakteristika ovog pristupa je to da poruke o grešci kasnije  tokom kompilacije imaju tendenciju da pruže mnogo korisnije informacije. Greške generisane od strane samog parsera imaju tendenciju samo da kažu da se greška desila na odredjenoj liniji i ne pružaju nikakve dodatne informacije.
 
@@ -57,11 +65,15 @@ Pored ovoga, renamer radi i sledeće stvari:
 \subsection{Provera tipa}
 \label{subsec:podnaslovTypecheck}
 
-Verovatno najvažnija faza u frontendu je kontrolor tipa (eng.\emph{type checker}), koji se nalazi u \underline{compiler/typecheck/}. GHC proverava  programe u njihovoj orginalnoj Haskel formi pre nego što ih desugar konvertuje u Core kod. Ovo umnogome komplikuje type checker ali poboljšava poruke o grešci.\\
-GHC definise apstraktu sintaksu Haskel programa u \underline{compiler/hsSyn/hsSyn/HsSyn.hs} koristeći strukture koje apstraktuju konkretnu reprezentaciju graničnih pojavljivanja identifikatora i paterna. \\
-Interfejs type checker-a ostatku kompajlera obezbeđuje \underline{compiler/typechecj/TcRnDriver.hs}. Svi moduli se izvršavaju zvanjem tcRnModule, i GHCI koristi tcRnStmt, tcRnStmt, tcRnExpr 
-i tcRnType za proveru iskaza, izraza i tipova redom. \\
-Funkcije tcRnModule i tcRnModuleTcRnM kontrolišu kompletnu statičku analizu Hasklel modula. Oni razrešavaju sve import iskaze, inicira stvarni postupak preimenovanja i provere tipa i završava sa obradom izvoza(eng. \emph{Export list}).\\
+Verovatno najvažnija faza u frontendu je kontrolor tipa (eng.\emph{type checker}), koji se nalazi u \underline{compiler/typecheck/}. GHC proverava  programe u njihovoj orginalnoj Haskel formi pre nego što ih desugar konvertuje u Core kod. Ovo umnogome komplikuje type checker ali poboljšava poruke o grešci.
+
+GHC definise apstraktu sintaksu Haskel programa u \\ \underline{compiler/hsSyn/hsSyn/HsSyn.hs}  koristeći strukture koje apstraktuju konkretnu reprezentaciju graničnih pojavljivanja identifikatora i paterna.
+
+Interfejs type checker-a ostatku kompajlera obezbeđuje \\ \underline{compiler/typechecj/TcRnDriver.hs}. Svi moduli se izvršavaju zvanjem tcRnModule, i GHCI koristi tcRnStmt, tcRnStmt, tcRnExpr 
+i tcRnType za proveru iskaza, izraza i tipova redom.
+
+Funkcije tcRnModule i tcRnModuleTcRnM kontrolišu kompletnu statičku analizu Hasklel modula. Oni razrešavaju sve import iskaze, inicira stvarni postupak preimenovanja i provere tipa i završava sa obradom izvoza(eng. \emph{Export list}).
+
 Reprezentacija tipova je fiksirana u modulu TypeRep i eksportovana kao podatak tipe Type.
 
 \subsection{Prečišćavanje}
@@ -72,4 +84,11 @@ Prečišćavanje prevodi iz masivnog HsSyn tipa u GHC-ov medjujezik CoreSyn. Obi
 \subsection{Core jezik}
 \label{subsec:podnaslovCore}
 
-Lepo bi bilo da pre nego što krenemo o optimizaijama napišemo nešto ukratko o Cor-u
+Lepo bi bilo da pre nego što krenemo o optimizaijama napišemo nešto ukratko o Cor-u, ovo treba doterati
+
+Core jezik se sastoji od nekoliko elemenata: variables, literals, let, case, lambda abstraction, application. 
+Uopšteno govoreći, naredba let odgovara alokaciji, naredba case odgovara evaluaciji.
+Osnovna ideja Core-a je da se napravi jednostavan tipizirani lambda račun, sa najmanjim brojem konstrukcija koju obuhvataju izvorni jezik. Na taj način se jednostavnije analizira kod, razmišlja o njemu, vrši optimizacija itd.
+Dakle, Core je jednostavan lenji funcionalni jezik; možemo ga smatrati asemblerom funkcionalnog jezika.
+
+Jedna od karakteristika Core-a je parcijalna evaluacija. Zbog mogućnosti lenjog izračunavanja funkcija, često dolazimo u situaciju da nemamo sve argumente na raspolaganju u trenutku izvršavanja funkcije. Tada se prekida izvršavanje funkcije dok se ne dobiju svi potrebni argumenti, nakon čega se izvrši funkcija. 

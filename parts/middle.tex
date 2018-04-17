@@ -1,37 +1,261 @@
-\section{Middle}
+\section{Middle end}
 \label{sec:middle}
-\label{slike_i_tabele}
 
-Slike i tabele treba da budu u svom okruženju, sa odgovarajućim naslovima, obeležene labelom da koje omogućava referenciranje. 
+U ovoj fazi izlazni kod iz prethodne faze – Core jezik se dodatno optimizuje 
+Postoje mnoge metode optimizacije koje implementira Core jezik. Tako, na primer, primenjuje se umetanje koda (eng. \emph{Inlining}), eliminacija zajedničkih podizraza (eng. Common Subexpression Elimination), kao i izbacivanje koda koji se ne koristi (eng. Dead Code Elimination).
 
-\begin{primer} Ovako se ubacuje slika. Obratiti pažnju da je dodato i 
+Interesantno je napomenuti, da se umetanjem koda, u funkcionalnim jezicima dobija 20 – 40\% ubrzanja, dok se kod imperativnih jezika, istom medotom postiže ubrzanje od 10 - 15\%. Stoga ćemo u ovom delu detaljije opisati rad Inlinera, kao vodećeg igrača u poboljšanju rada kompajlera. GHC Inliner pokušava učiniti  što je više moguće umetanje u jednom prolazu. Pošto umetanje često otkriva nove mogućnosti za dalje transformacije, Inliner je zapravo deo GHC Simplifikatora(eng. \emph{GHC simplifier}), koja obavlja veliki broj lokalnih transformacije na iterativan način (ili dok se ne postigne određen broj ponavljanja).
+
+U modernoj verziji GHC kompajlera se koristi LLVM (eng. \emph{low-level virtual machine}) u završnoj fazi generisanja koda. LLVM u sebi ima ugrađene mnogobrojne optimizacije, tako da ako je neka preskočena u Core optimizaciji, LLVM će je obuhvatiti.
+
+\subsection{Umetanje i beta redukcija (eng. \emph{Inlining and beta reduction})}
+\label{subsec:podnaslovInlineBeta}
+
+Utvrdili smo da je korisno identifikovati tri različite transformacije povezane sa umetanjem(eng. \emph{inlining}):
+\begin{enumerate}
+	\item  Umetanje (eng.\emph{ Inlining itself}) - zamenjuje pojavu ograničene let (eng.let-bound - nemam predstavu kako bolje od ovog)  	promenljive definicijom sa njene desne strane. Na primer, umetanje za f izgleda: 
+	\begin{verbatim}
+		let { f = \x -> x*3 } in f (a + b) - c
+		==> [inline f]
+		let { f = \x -> x*3 } in (\x -> x*3) (a + b) - c
+	\end{verbatim}
+	Treba obratiti pažnju da umetanje nije ograničeno na definiciju funkcije, već svaka ograničena let promenljiva može potencijalno biti umetnuta. (Ipak treba imati na umu da pojava promenljive na poziciji argumenta nije kandidat za umetanje, jer su oni ograničeni tako da budu atomični.)
+	\item Eliminacija mrtvog koda (eng. \emph{Dead code elimination}) - odbacuje let vezivanje koje se više ne koriste. Ovo se obično javlja 
+	kada su sve pojave promeljive umetnute. Ako primenimo eliminaciju na prethodni primer dobijamo :
+	\begin{verbatim}
+		let { f = \x -> x*3 } in (\x -> x*3) (a + b) - c
+		==> [dead f]
+		(\x -> x*3) (a + b) - c
+	\end{verbatim}
+	\item $\beta$  redukcija (eng. \emph{Beta reduction}) - jednostavno prezapišemo lamda izraz na sledeći način:
+		\begin{verbatim}
+			(\x->E) A to let {x = A} in E 
+		\end{verbatim} Primenom $\beta$ redukcije na gornji primer:
+		\begin{verbatim}
+			(\x -> x*3) (a + b) - c
+			==> [beta]
+			(let { x = a+b } in x*3) - c
+		\end{verbatim}
+\end{enumerate}
+
+Dok su eliminacija mrtvog koda i $\beta$ redukcija su jednostavne, umetanje je jedino nezgodno, pa nam je ono interesantnije.
+
+\subsubsection{Jednostavno umetanje (eng. \emph{Simple inlining})}
+\label{sec:podpodnaslovSimpleInline}
+
+Korisno je razlikovati dva slučaja umetanja:
+\begin{enumerate}
+	\item SGNF(eng. WHNF) - Ako je promeljiva vezana za slabu glavnu normalnu formu (SGNF) (eng. weak head normal form (WHNF)) - to 
+	je atom, lambda ili konstruktor - tada se može umetnuti bez rizika od dupliranja poslanja. Možda je jedina negativna 
+	strana povećanje veličine koda.
+	\item Ne-SGNF(eng.Non-WHNFs) - U suprotnom, umetanje nosi rizik od gubitka razmene, a samim tim i dupliranja rada. Na primer,
+		\begin{verbatim}
+		let x = f 100 in ... x ... x ... 
+		\end{verbatim}
+	možda bi bilo neupotrebljivo za umetanje x, jer bi tada f 100 bio ocenjeno dva puta 
+	umesto jednom. Neformalno, kažemo da je transformacija S-sigurna(eng. W-safe) ako garantuje da ne duplira posao.
+\end{enumerate}
+
+U slučaju SGNF-a(eng WHNFs), kompromis je između veličine koda i koristi od umetanja. Primene atoma i konstruktora su 
+jednostavne: uvek su dovoljno male da bi se umetale. (Konstruktori moraju imati atomične argumente). Funkcije, za 
+razliku od toga, mogu biti velike, tako da efekat neograničenih umetanja u odnosu na veličinu koda može biti znatan. Kao i većina 
+kompajlera, koristi se heuristika za odlučivanje kada se radi umetanje funkcija. 
+
+Za Ne-SGNF-u(engl.Non-WHNFs), pažnja se fokusira na to kako se promenljiva koristi. Ako se promenljiva 
+pojavi samo jednom, onda je verovatno sigurno da ćemo je umetnuti. Inače jedan od naivnih pristupa bi bio da vršimo jednostavnu analizu pojava koja 
+beleži za svaku promeljivu na koliko mesta se koristi, i koristimo ove informacije kako bi naučili simplifikator da izvrši umetanje. Medjutim ovaj način ima svoje komplikacije, pa je drugo rešenje dato u sledećoj sekciji.
+
+\subsubsection{ Koristeći linearnost(eng. \emph{Using linearity})}
+\label{sec:podpodnaslovLinearity}
+
+Zbog komplikacija, postalo je neophodno pratiti informacije o pojavama koje su najkomplikovanije i koje su podložne bug-u. Štaviše, 
+greške u radu sa dupliranjem se manifestuju samo kao problemi sa performansama i mogu proći neopaženo dugo vremena. To sugeriše da bi sistem linearnog tipa bi bio dobar način da se identifikuju promelnjive koje se mogu bezbedno umetnuti, iako se one javljaju unutar lambde, ili koje se ne mogu bezbedno umetnuti iako se (trenutno) pojavljuju samo jednom. S-sigurne(eng. W-safe) transformacije čuvaju i informacije o linijskom tipu, a time i garancije da se dupliranje neće vršiti.
+
+Nažalost, većini linearnih sistema je neadekvatna jer ne uzimaju u obzir procenu potreba po pozivu (eng. \emph{call-by-need}). Na primer, 
+razmotrite izraz:
 \begin{verbatim}
-\usepackage{graphicx}
+	let x = 3*4
+	y = x+1 in y + y
+\end{verbatim}
+Po proceni potreba po pozivu , iako se y procenjuje mnogo puta, x će biti procenjen samo jednom. Većna linearnih 
+sistema bi bila previše konzervativna i pripisivala bi nelinearni tip x, kao i y, sprečavajući da x bude umetnut.
+
+Postoji nekoliko pokušaja da se razvije sistem linearnog tipa koji uzima u obzir procenu potreba, ali nijedan nije našao svoju praktičnu prmenu. Jedan od pokušaja se može naći u \cite{transformation-based-optimiser-Haskell} 
+
+
+\subsection {Transformacija uslova (eng.  \emph{Transforming conditionals})}
+\label{sec:podnaslovTransformation}
+
+Većina kompajlera ima posebna pravila za optimizaciju uslova. Na primer, razmotrimo izraz:
+\begin{verbatim}
+	if (not x) then E1 else E2
+\end{verbatim}
+Nijedan pristojan kompajler ne bi ustvari negirao vrednost x u vreme izvršavanja! Da vidimo, šta se onda događa ako jednostavno 
+izvršimo transformacije. Nakon što smo uklonili \textit{if} i umetnuli definiciju za \textit{not}, dobijamo:
+\begin{verbatim}
+	case (case x of {True -> False; False -> True}) of
+		True -> E1
+		False -> E2
+\end{verbatim}
+Ovde, spoljašnji slučaj ispituje vrednost koju vraća unutrašnji slučaj. Ova zapažanja sugerišu da možemo premestiti spoljni slučaj 
+unutar grana unutrašnjeg, tako da:
+\begin{verbatim}
+	case x of
+		True -> case False of {True -> E1; False -> E2}
+		False -> case True of {True -> E1; False -> E2}
 \end{verbatim}
 
-\begin{figure}[h!]
-\begin{center}
-%\includegraphics[scale=0.75]{panda.jpg}
-\end{center}
-\caption{Pande}
-\label{fig:pande}
-\end{figure}
+Obratite pažnju na to da je originalni spoljašnji case izraz dupliran, ali svaka kopija sada ispituje poznatu vrednost, pa je 
+očigledno sledeće pojednostavljenje,i dobije se tačno ono čemu smo se i nadali:
+\begin{verbatim}
+	case x of
+		True -> E2
+		False -> E1
+\end{verbatim}
 
-Na svaku sliku neophodno je referisati se negde u tekstu. Na primer, na %slici \ref{fig:pande} prikazane su pande. 
-\end{primer}
+Obe ove transformacije su generalno primenljive. Druga transformacija, transformacija “poznatih-konstruktora”(eng. \emph{case-of-known-
+constructor}) eliminiše niz izraza koji ispituje poznatu vrednost.
 
-\begin{primer} I tabele treba da budu u svom okruženju, i na njih je neophodno referisati se u tekstu. Na primer, u tabeli% \ref{tab:tabela1} su prikazana različita poravnanja u tabelama.
+\subsubsection {Pridruživanje tačaka (eng. \emph{Join points})}
+\label{sec:podpodnaslovJoin}
 
-\begin{table}[h!]
-\begin{center}
-\caption{Razlčita poravnanja u okviru iste tabele ne treba koristiti jer su nepregledna.}
-\begin{tabular}{|c|l|r|} \hline
-centralno poravnanje& levo poravnanje& desno poravnanje\\ \hline
-a &b&c\\ \hline
-d &e&f\\ \hline
-\end{tabular}
-\label{tab:tabela1}
-\end{center}
-\end{table}
+Postavlja se pitanje kako možemo dobiti koristi od  transformacija “case-case”(eng. \emph{case-of-case}) bez rizika od dupliranja koda? Jednostavna ideja je napraviti lokalne definicije sa desne strane spoljnjeg slučaja, ovako:
+\begin{verbatim}
+	case (case S of {True -> R1; False -> R2}) of
+		True -> E1
+		False -> E2
+	=>
+	let e1 = E1; e2 = E2
+	in case S of
+		True -> case R1 of {True -> e1; False -> e2}
+		False -> case R2 of {True -> e1; False -> e2}
+\end{verbatim}
 
-\end{primer}
+Sada E1 i E2 nisu duplirani, iako umesto toga imamo troškove implementacije vezivanja za e1 i e2. U primeru, međutim, dva unutrašnja slučaja se eliminišu, ostavljajući samo jednu pojavu svakog od e1 i e2, tako da će njihove definicije biti umetnute, ostavljajući isti rezultat kao i ranije.
+
+Sigurno ne možemo garantovati da će novo uvedena vezivanja biti eliminisati. Razmotrimo, na primer, izraz:
+\begin{verbatim}
+	if (x || y) then E1 else E2
+\end{verbatim}
+Ovde, || je operator disjunkcije, definiše se:
+\begin{verbatim}
+	|| = \ a b -> case a of {True -> True; False -> b}
+\end{verbatim}
+
+Odstranjivanje(eng. \emph{Desugaring}) uslova i umetanje || daje nam:
+\begin{verbatim}
+	case (case x of {True -> True; False -> y}) of
+		True -> E1
+		False -> E2
+\end{verbatim}
+
+Sada primenjujući (novu) “case-case” transformaciju:
+\begin{verbatim}
+	let e1 = E1 ; e2 = E2
+	in case x of
+		True -> case True of {True -> e1; False -> e2}
+		False -> case y of {True -> e1; False -> e2}
+\end{verbatim}
+
+Za razliku od \textit{not} primera, samo jedan od dva unutrašnja slučaja je simplifikovan, tako da će samo e2 sigurno biti umetnut, jer e1 se i dalje pominje dvaput:
+\begin{verbatim}
+	let e1 = E1
+	in case x of
+		True -> e1
+		False -> case y of {True -> e1; False -> E2}
+\end{verbatim}
+
+%Zanimljivo je da e1 igra ulogu labele u konvencionalnoj tehnologiji kompajlera. S obzirom na originalni uslov, C kompajler će "kratko spojiti"(eng. short-circuit) ocenu stanja ako se ispostavi da je x tačno, generator koda izgleda:
+%\begin{verbatim}
+%	if (x) {goto l1};
+%	if (y) {goto l1};
+%	goto l2;
+%	l1: ...code for E1...; goto l3
+%	l2: ...code for E2...
+%	l3: ...
+%\end{verbatim}
+%
+%Ovde, l1 je labela gde se dva moguća puta izvršavanja (ako je x tačno ili ako je x netačno i y je tačno) spajaju - zovemo ga "vezna 
+%tačka" (eng. join point). Ovo upućuje na zaključak da naš generator koda treba da bude u stanju da sprovede vezivanje za e1, tj da  
+%vrši jednostavni skok na neki zajednički kod (nakon što možda prilagodi pokazivač steka) gde god je e1 procenjeno. Naš kompajler radi 
+%baš to, generator koda vrši jednostavnu sintaksičku analizu za identifikaciju promenljivih čije se procene sigurno odvijaju pre 
+%steka. Kao rezultat, dobićemo u suštini isti kod kao C kompajler za naše uslove.
+%
+%Gledajući sa ove strane, čin umetanja je ono što bi kompilator za imperativne jezike mogao nazvati "eliminacija skokova" (eng. jump elimination).Dobar C kompajler bi verovatno eliminisao skok na l2 tako:
+%\begin{verbatim}
+%	if (x) {goto l1};
+%	if (y) {goto l1};
+%	l2: ...code for E2...
+%	l3: ...
+%	l1: ...code for E1...; goto l3
+%\end{verbatim}
+%
+%Vratimo se nazad u funkcionalni svetu, ako je E1 mali, onda bi se moglo odlučiti da se umetne e1 u dva slučaja čime se eliminiše skok, ali imamo blago povećanja veličine koda. Kompilatori za imperativne jezike upravo to i rade, naročito u slučaju kada je kod na odredištu skok samo još jedan skok.
+%
+%Nije bitno da transformacije postignu sve što konvencionalna tehnologija kompajlera ne čini, već da jedan mehanizam (umetanje), koji 
+%je u svakom slučaju potreban, ravnomerno posluje sa eliminacijom skokova, kao i ostalim konvencionalnim efektima.
+
+\subsubsection{Objedinjavanje pridruženih tačaka(eng. \emph{Generalising join points})}
+\label{sec:podpodnaslovGeneralization}
+
+Da li se sve ovo delo generalizuje na tipove podataka koji nisu booleani? Na prvom mestu može se pomisliti da je odgovor “da, naravno”, ali ustvari izmenjena “case-case” transformacija je jednostavno besmislena ako izvorno spoljašnji case izraz povezuje bilo koju promeljivu. Na primer, razmotrite izraz:
+\begin{verbatim}
+	f (if b then B1 else B2)
+\end{verbatim}
+gde f definišemo:
+\begin{verbatim}
+	f = \ as -> case as of {[] -> E1; (b:bs) -> E2}
+\end{verbatim}
+Prečišćavanje(eng. Desugaring) if uslova i umetanje f daje nam:
+\begin{verbatim}
+	case (case b of {True -> B1; False -> B2}) of
+		[] -> E1
+		(b:bs) -> E2
+\end{verbatim}
+Sada, pošto E2 može ukljuciti b i bs, ne možemo vezati novu promenljivu e2 kao što smo ranije radili! Rešenje je jednostavno vezati funkciju e2 koja uzima b ili bs kao svoje argumente. Pretpostavimo, na primer, da E2 pominje bs, ali ne b.Zatim možemo izvršiti “case-case” transformaciju tako da:
+\begin{verbatim}
+	let e1 = E1; e2 = \ bs -> E2
+	in case b of
+		True -> case B1 of {[] -> e1; (b:bs) -> e2 bs}
+		False -> case B2 of {[] -> e1; (b:bs) -> e2 bs}
+\end{verbatim}
+
+Odavde prevazilazi da celokupna podešavanja funkcionišu za proizvoljne tipove podataka od strane korisnika, a ne samo za booleane.
+
+\subsubsection{Objedinjavanje case eliminacija (eng. \emph{Generalising case elimination})}
+
+Ranije smo raspravljali o slučaju transformacije “poznatih-konstruktora”(eng. \emph{case-of-known-constructor}) koja eliminiše niz izraza. 
+
+Postoji korisna varijanta ove transformacije koja takođe eliminiše niz izraza. Razmotrimo izraz:
+\begin{verbatim}
+	if null xs then r else tail xs
+\end{verbatim}
+gde su null i tail definisani na sledeći način:
+\begin{verbatim}
+	null = \ as -> case as of {[] -> True; (b:bs) -> False}
+	tail = \ cs -> case cs of {[] -> error "tail"; (d:ds) -> ds}
+\end{verbatim}
+Nakon uobičajenog umetanja, dobijamo:
+\begin{verbatim}
+	case (case xs of {[] -> True; (b:bs) -> False}) of
+		True -> r
+		False -> case xs of
+			[] -> error "tail"
+			(d:ds) -> ds
+\end{verbatim}
+Sada možemo da odradimo “case-case” transformaciju, i dobijamo:
+\begin{verbatim}
+	case xs of
+		[]-> r
+		(b:bs) -> case xs of
+						[] -> error "tail"
+						(d:ds) -> ds
+\end{verbatim}
+Sada je očito jasno da je unutrašnja procena xs redundantna, jer u (b:bs) grani spoljašnjeg case slučaja znamo da xs svakako ima 
+oblik (b:bs)! Stoga možemo eliminisati unutrašnji slučaj, biramo alternativu (d:ds), ali supstitucijom b za d i bs za ds: 
+\begin{verbatim}
+	case xs of
+		[]-> r
+		(b:bs) -> bs
+\end{verbatim}
+
