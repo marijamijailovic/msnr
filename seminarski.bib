@@ -1,11 +1,6 @@
 % na pocetku su sabloni za razlicite tipove dokumenata
 % mogu se obrisati ako ne prolaze kompilaciju
 
-% poslednje tri reference su od Milene
-
-% dve ili tri reference su u radnom obliku (bice doterane)
-
-% treba odluciti gde ih citirati u tekstu...
 
 @book{SifBook,
   author = "",
@@ -22,22 +17,6 @@
   author = "",
   title = "",
   journal = "",
-  year = "XXXX"
-}
-
-@mastersthesis{SifMasterThesis,
-  author = "",
-  title = "",
-  school = "",
-  type = "master diploma thesis",
-  year = "XXXX",
-}
-
-@phdhesis{SifPhdThesis,
-  author = "",
-  title = "",
-  school = "",
-  type = "phd thesis",
   year = "XXXX"
 }
 
@@ -66,6 +45,104 @@
   note = ""
 }
 
+@misc{GHCxx,
+	title = {{The Glasgow Haskell, Current Status}},
+	howpublished ={ \url{https://ghc.haskell.org/}}
+	author = {},
+	year = {},
+	month = "",
+	note = {}
+}
+
+
+@misc{StanfordGHC,
+	title = {Why is Haskell difficult},
+	howpublished={\url{http://www.scs.stanford.edu/11au-cs240h/notes/ghc.html/}}
+	author = {},
+	year = {},
+	month = "",
+	note = {}
+}
+
+@book{Has10,
+	author = "Simon Marlow (editor)",
+	title = "Haskell 2010 Language Report",
+	publisher = "Haskell community",
+	volume = "",
+	number = "",
+	series = "",
+	address = "Cambridge",
+	edition = "",
+	year = "2010",
+	month = "April",
+	note = ""
+}
+
+@book{Launchbury,
+	author = "John LaunchburySimon L Peyton Jones",
+	title = "LISP and Symbolic Computation",
+	publisher = "Kluwer Academic Publishers",
+	volume = "",
+	address = "",
+	year = "1995",
+	isbn={1573-0557},
+	url={https://doi.org/10.1007/BF01018827}
+}
+
+@article{transformation-based-optimiser-Haskell,
+	author = {Simon L Peyton Jones,Andre L M Santos},
+	journal ={{Science of Computer Programing}},
+	pages = {3-47},
+	title = {{On Computable Numbers, with an application to the Entscheidungsproblem}},
+	volume = {32/1},
+	year = {1997}
+}
+
+@book{Launchbury,
+	author = "John LaunchburySimon L Peyton Jones",
+	title = "LISP and Symbolic Computation",
+	publisher = "Kluwer Academic Publishers",
+	volume = "",
+	address = "",
+	year = "1995",
+	isbn={1573-0557},
+	url={https://doi.org/10.1007/BF01018827}
+}
+
+@article{Cinliner,
+	author = "JM Davidson, AM Holler",
+	title = "A study of C function inliner",
+	year = "1988",
+	journal = "Software - Practice and Experience"
+}
+
+@article{inliner,
+	author = {Simon L Peyton Jones},
+	journal ={{Journal of Functional Programming}},
+	pages = {393-434},
+	title = {{Secrets of the Glasgow Haskell Compiler inliner }},
+	volume = {12},
+	year = {2002}
+}
+
+@article{turner,
+	author = {DM Turner, PL Wadler, C Mossin},
+	journal ={{La Jolla}},
+	pages = {},
+	title = {{Once upon a type}},
+	volume = {12},
+	year = {1995}
+}
+
+@book{appel,
+	author = "Andrew W.Appel",
+	title = "Compiling with Continuations",
+	publisher = "Princeton University, New Jersey",
+	volume = "",
+	address = "",
+	year = "2007",
+	isbn={9780521033114}
+}
  
 @mastersthesis{Rei12,
   author = "Nico Reißmann",
@@ -83,20 +160,6 @@
   title = {GHC(STG,Cmm,asm) illustrated\\for hardware persons},
   year = {2013},
   note = {on-line at: \url{http://gcc.gnu.org/}}
-}
-
-@book{Has10,
-  author = "Simon Marlow (editor)",
-  title = "Haskell 2010 Language Report",
-  publisher = "Haskell community",
-  volume = "",
-  number = "",
-  series = "",
-  address = "Cambridge",
-  edition = "",
-  year = "2010",
-  month = "April",
-  note = ""
 }
 
 @techreport{SifTechReport,
@@ -183,13 +246,6 @@ the Spineless Tagless G-machine",
   month = "Maj"
 }
 
-@misc{GHCxx,
-  title = {The Glasgow Haskell, Current Status},
-  author = {},
-  year = {},
-  month = "",
-  note = {}
-}
 
 @mastersthesis{She08,
   author = "jeremy w. sherman",
@@ -238,35 +294,4 @@ the Spineless Tagless G-machine",
   year = "2008",
   month = "",
   note = ""
-}
-
-@book{laski2009software,
-  title={{Software Verification and Analysis}},
-  author={Laski, J. and Stanley, W.},
-  isbn={9781848822405},
-  url={http://books.google.rs/books?id=5hFnaDQ1jiAC},
-  year={2009},
-  publisher={Springer-Verlag},
-  address = {London}
-}
-
-@misc{gcc,
-title = {{GNU gcc}},
-note = {on-line at: \url{http://gcc.gnu.org/}},
-    author = {Free Software Foundation},
-    year = {2013}
-}
-
-@article{haltingproblem,
-    author = {Turing, A. M.},
-    citeulike-article-id = {155758},
-    journal = {Proceedings of the London Mathematical Society},
-    keywords = {computability, entscheidungsproblem, turing},
-    number = {42},
-    pages = {230--265},
-    posted-at = {2005-04-08 18:11:59},
-    priority = {0},
-    title = {{On Computable Numbers, with an application to the Entscheidungsproblem}},
-    volume = {2},
-    year = {1936}
 }
