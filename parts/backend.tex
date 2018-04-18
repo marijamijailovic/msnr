@@ -2,7 +2,35 @@
 \label{sec:backend}
 \label{slike_i_tabele}
 
-Slike i tabele treba da budu u svom okruženju, sa odgovarajućim naslovima, obeležene labelom da koje omogućava referenciranje. 
+
+Kod prevodjenja jezika Core u neki imperativni medjujezik kao sto je C-- postoji vise etapa.
+Prvo se CoreSyn (GHC’s intermediate language) prevodi u StgSyn (GHS’s intermediate language) I to u dve faze:
+
+
+\paragraph{CoreToStg - }
+
+Core-to-Core proces konvertuje program u ANF (A-normal form). A-normalnu formu su osmislili Sabry I Fellisen 1992. god.  U ANF formi svi argumenti moraju biti trivijalni. Odnosno  vrednost svih argumenata se mora izracunati odmah. ANF se bavi osnovnim definicijama zasnovanim na lamda(staviti znak) racunu sa slabom redukcijom I let izrazima uz ogranicenja:
+- dozvoljene su samo konstante, lamda(staviti znak) termove I promenjive kao argumenti funkcije
+- zahteva rezultat netrivijalnih izraza bude pripadati let-bound promenjivoj ili vracen iz funkcije \\ \\
+Primer ANF: \\ f(g(x),h(y))\\
+
+\begin{tabbing}
+let v0 \= g(x) in \\
+	\>let v1 \= h1(y) in \\
+	\> \> f(v0, v1)
+\end{tabbing}
+
+\paragraph{CoreToStg - }
+
+Rezultat prve faze u velikoj meri odgovara krajnjem StgSyn, zato u ovoj fazi nema preterano mnogo posla. Ova faza dekorise StgSyn sa mnogo pomocnih  promenjivih, let-no-escape indikatora.
+
+STG program se pomocu  Code Generator-a pretvara u neki niži jezik kao što je C--.
+
+\subsection{GHS faze}
+
+Glasgov Haskel Compajler (\emph {Glasgow Haskell Compiler -GHC}) je u početku prevodio kod za STG-mašine (\emph{Spineless Tagless G-machine}) na C jezik. Ideja je bila da se ikoriste C kompajleri koji su portabilni i imaju određene dobre optimizacije. Međutim, pokazalo se da je C ima mnogo mana u kontekstu jezika srednjeg nivoa(\emph {intermediate language}), posebno za kompilatore lenjih funkcionalnih jezika sa nestandardnom kontrolom toka.Takođe C ne podržava repnu rekurziju, pristup steku radi čišćenja memorije(\emph{garbage collection}) i još mnogo drugih stvari. To nije iznenađujuće, jer C nije dizajniran za to. Pisci kompilatora višeg nivoa kao što je GHC su odlučili da ublaže prethodno navedene nedostatke. Problem su trebale da reše razne ekstenzije GNU C-a. Međutim i ova solucija ima svoje mane kao što su velike zavisnosti od GNU C verzije kompilatora, optimizacija za C često nema efekta na te jezike višeg nivoa - mnogo statičkih informacija bi moglo biti izgublljeno. Kao odgovor na to GHC je ubacio podršku za nejtiv kod generatore (\emph{native code generators}) koji direktno prevode u mašinski kod ali samo za određene sisteme, konkretno x86 , SPARC.
+
+
 
 \begin{primer} Ovako se ubacuje slika. Obratiti pažnju da je dodato i 
 \begin{verbatim}
