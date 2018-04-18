@@ -4,7 +4,7 @@
 
 
 Kod prevodjenja jezika Core u neki imperativni medjujezik kao sto je C-- postoji vise etapa.
-Prvo se CoreSyn (GHC’s intermediate language) prevodi u StgSyn (GHS’s intermediate language) I to u dve faze:
+Prvo se CoreSyn (GHC’s intermediate language) prevodi u StgSyn (GHC’s intermediate language) I to u dve faze:
 
 
 \paragraph{CoreToStg - }
@@ -26,11 +26,17 @@ Rezultat prve faze u velikoj meri odgovara krajnjem StgSyn, zato u ovoj fazi nem
 
 STG program se pomocu  Code Generator-a pretvara u neki niži jezik kao što je C--.
 
-\subsection{GHS faze}
+\subsection{GHC kod generator}
 
-Glasgov Haskel Compajler (\emph {Glasgow Haskell Compiler -GHC}) je u početku prevodio kod za STG-mašine (\emph{Spineless Tagless G-machine}) na C jezik. Ideja je bila da se ikoriste C kompajleri koji su portabilni i imaju određene dobre optimizacije. Međutim, pokazalo se da je C ima mnogo mana u kontekstu jezika srednjeg nivoa(\emph {intermediate language}), posebno za kompilatore lenjih funkcionalnih jezika sa nestandardnom kontrolom toka.Takođe C ne podržava repnu rekurziju, pristup steku radi čišćenja memorije(\emph{garbage collection}) i još mnogo drugih stvari. To nije iznenađujuće, jer C nije dizajniran za to. Pisci kompilatora višeg nivoa kao što je GHC su odlučili da ublaže prethodno navedene nedostatke. Problem su trebale da reše razne ekstenzije GNU C-a. Međutim i ova solucija ima svoje mane kao što su velike zavisnosti od GNU C verzije kompilatora, optimizacija za C često nema efekta na te jezike višeg nivoa - mnogo statičkih informacija bi moglo biti izgublljeno. Kao odgovor na to GHC je ubacio podršku za nejtiv kod generatore (\emph{native code generators}) koji direktno prevode u mašinski kod ali samo za određene sisteme, konkretno x86 , SPARC.
+Glasgov Haskel Compajler (\emph {eng.Glasgow Haskell Compiler -GHC}) je u početku prevodio kod za STG-mašine (\emph{eng.Spineless Tagless G-machine}) na C jezik. Ideja je bila da se ikoriste C kompajleri koji su portabilni i imaju određene dobre optimizacije. Međutim, pokazalo se da je C ima mnogo mana u kontekstu jezika srednjeg nivoa(\emph {eng.intermediate language}), posebno za kompilatore lenjih funkcionalnih jezika sa nestandardnom kontrolom toka.Takođe C ne podržava repnu rekurziju, pristup steku radi čišćenja memorije(\emph{eng.garbage collection}) i još mnogo drugih stvari. To nije iznenađujuće, jer C nije dizajniran za to. Pisci kompilatora višeg nivoa kao što je GHC su odlučili da ublaže prethodno navedene nedostatke.\\
 
-
+ \indent Problem su trebale da reše razne ekstenzije GNU C-a. Međutim i ova solucija ima svoje mane kao što su velike zavisnosti od GNU C verzije kompilatora, optimizacija za C često nema efekta na te jezike višeg nivoa - mnogo statičkih informacija bi moglo biti izgublljeno. \\
+ 
+ \indent Kao odgovor na to GHC je ubacio podršku za nejtiv kod generatore (\emph{eng.native code generators}) koji direktno prevode u mašinski kod ali samo za određene sisteme, konkretno x86 , SPARC.\\
+ 
+ \indent Želja da se zadrže dobre osobine svođenja i komapiliranja na C, a da se opet prevaziđu problemi inspirisala je razvoj jezika srednje-niskog nivoa (\emph{eng.low-level intermediate languages}). Od interesa je jezik C--,jer je dizajniran pod uticajem GHC-a.Iako je upotreba C-- kao srednjeg jezika tehnički veoma perspektivan pristup, dolazi sa veoma ogromnim praktičnim problemom: razvoj portabilnog kompilatorskog bekenda je isplatljiv ako se uopšte koristi više kompilatora, a pisci kompilatora ne žele da rade na razvoju nečega što neće biti u širokoj upotrebi. Kao posledica toga, neka varijanta C-- jezika se koristi kao srednje-niski jezik u GHC, ali generalno nema razvijenog bekenda u C-- koja bi mogla biti podržana od strane većeg broja kompilatora kao što je GHC.\\
+ 
+ \indent Trenutno najperspektivniji bekend frejmvork je LLVM (\emph{eng.Low Level Virtual Machine}) koji dolazi sa just-in-time kompilacijom kao i life-long analizom i optimizacijom. Jedan LLVM-bazirani C komilator, takozvani clang, stekao je značajnu ulogu kao jedna alternativa GNU C kompilatorima. LLVM se još uvek razvija i predstavlja dobar put ka dugoročnoj strategiji.
 
 \begin{primer} Ovako se ubacuje slika. Obratiti pažnju da je dodato i 
 \begin{verbatim}
