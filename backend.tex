@@ -1,0 +1,71 @@
+\section{Backend}
+\label{sec:backend}
+\label{slike_i_tabele}
+
+
+Kod prevođenja jezika Core u neki imperativni međujezik kao što je C-\,- postoji više etapa.
+Prvo se CoreSyn (GHC’s intermediate language) prevodi u StgSyn (GHC’s intermediate language), i to u dve faze:
+
+
+\paragraph{CoreToStg - }
+
+Core-to-Core proces konvertuje program u ANF (A-normal form). A-normalnu formu su osmislili Sabry i Fellisen 1992. god.  U ANF formi svi argumenti moraju biti trivijalni, odnosno vrednost svih argumenata se mora izračunati odmah. ANF se bavi osnovnim definicijama zasnovanim na \lambda računu sa slabom redukcijom i let izrazima uz ograničenja:
+- dozvoljene su samo konstante, \lambda termovi i promenljive kao argumenti funkcije
+- zahtev da rezultat netrivijalnih izraza pripada let-povezanoj promenljivoj ili vraćen iz funkcije \\ \\
+Primer ANF: \\ f(g(x),h(y))\\
+
+\begin{tabbing}
+let v0 \= g(x) in \\
+	\>let v1 \= h1(y) in \\
+	\> \> f(v0, v1)
+\end{tabbing}
+
+\paragraph{CoreToStg - }
+
+Rezultat prve faze u velikoj meri odgovara krajnjem StgSyn, zato u ovoj fazi nema preterano mnogo posla. Ova faza dekoriše StgSyn sa mnogo pomoćnih  promenljivih, let-no-escape indikatora.
+
+STG program se pomoću  Code Generator-a pretvara u neki niži jezik kao što je C-\,-.
+
+\subsection{GHC k\hat{o}d generator}
+
+Glazgov Haskel Kompajler (\emph {eng. Glasgow Haskell Compiler - GHC}) je u početku prevodio k\hat{o}d za STG-mašine (\emph{eng.Spineless Tagless G-machine}) na C jezik. Ideja je bila da se iskoriste C kompajleri koji su portabilni i imaju određene dobre optimizacije. Međutim, pokazalo se da C ima mnogo mana u kontekstu jezika srednjeg nivoa (\emph {eng. intermediate language}), posebno za kompilatore lenjih funkcionalnih jezika sa nestandardnom kontrolom toka. Takođe, C ne podržava repnu rekurziju, pristup steku radi čišćenja memorije (\emph{eng. garbage collection}) i još mnogo drugih stvari. To nije iznenađujuće, jer C nije dizajniran za to. Pisci kompilatora višeg nivoa kao što je GHC su odlučili da ublaže prethodno navedene nedostatke.\\
+
+ \indent Problem je trebalo da reše razne ekstenzije GNU C-a. Međutim, i ovo rešenje ima svoje mane kao što je velika zavisnost od GNU C verzije kompilatora. Optimizacija za C često nema efekta na te jezike višeg nivoa - mnogo statičkih informacija bi moglo biti izgubljeno. \\
+ 
+ \indent Kao odgovor na to, GHC je ubacio podršku za k\hat{o}d generatore niskog nivoa (\emph{eng. native code generators}), koji direktno prevode u mašinski k\hat{o}d, ali samo za određene sisteme, konkretno x86 , SPARC, PowerPC.\\
+ 
+ \indent Želja da se zadrže dobre osobine svođenja i komapiliranja na C, a da se opet prevaziđu problemi, inspirisala je razvoj jezika srednje-niskog nivoa (\emph{eng. low-level intermediate languages}). Od interesa je jezik C-\,-, jer je dizajniran pod uticajem GHC-a. Iako je upotreba jezika C-\,- kao srednjeg jezika tehnički veoma perspektivan pristup, dolazi sa velikim praktičnim problemima: razvoj portabilnog kompilatorskog backend-a je isplativ, ako ga koristi više kompilatora, a pisci kompilatora ne žele da rade na razvoju nečega što neće biti u širokoj upotrebi. Kao posledica toga, neka varijanta C-\,- jezika se koristi kao srednje-niski jezik u GHC-u, ali generalno nema razvijenog backend-a u jeziku C-\,- koja bi mogla biti podržana od strane većeg broja kompilatora kao što je GHC.\\
+ 
+ \indent Trenutno najperspektivniji backend frejmvork - okvir (eng. \emph{framework}) je LLVM (\emph{eng. Low-Level Virtual Machine}), koji dolazi sa just-in-time kompilacijom kao i life-long analizom i optimizacijom. Jedan LLVM-bazirani C kompilator, takozvani clang, stekao je značajnu ulogu kao jedna alternativa GNU C kompilatorima. LLVM se još uvek razvija i predstavlja dobar put ka dugoročnoj strategiji.
+
+\begin{primer} Ovako se ubacuje slika. Obratiti pažnju da je dodato i 
+\begin{verbatim}
+\usepackage{graphicx}
+\end{verbatim}
+
+\begin{figure}[h!]
+\begin{center}
+%\includegraphics[scale=0.75]{panda.jpg}
+\end{center}
+\caption{Pande}
+\label{fig:pande}
+\end{figure}
+
+Na svaku sliku neophodno je referisati se negde u tekstu. Na primer, na %slici \ref{fig:pande} prikazane su pande. 
+\end{primer}
+
+\begin{primer} I tabele treba da budu u svom okruženju, i na njih je neophodno referisati se u tekstu. Na primer, u tabeli% \ref{tab:tabela1} su prikazana različita poravnanja u tabelama.
+
+\begin{table}[h!]
+\begin{center}
+\caption{Razlčita poravnanja u okviru iste tabele ne treba koristiti jer su nepregledna.}
+\begin{tabular}{|c|l|r|} \hline
+centralno poravnanje& levo poravnanje& desno poravnanje\\ \hline
+a &b&c\\ \hline
+d &e&f\\ \hline
+\end{tabular}
+\label{tab:tabela1}
+\end{center}
+\end{table}
+
+\end{primer}
