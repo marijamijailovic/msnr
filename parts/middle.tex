@@ -5,7 +5,7 @@ U ovoj fazi izlazni k\^{o}d iz prethodne faze – Core jezik - se dodatno optimi
 
 Interesantno je napomenuti da se umetanjem k\^{o}da, u funkcionalnim jezicima dobija 20 – 40\% ubrzanja, dok se kod imperativnih jezika, istom metodom postiže ubrzanje od 10 - 15\% \cite{Cinliner}. Stoga ćemo u ovom delu detaljnije opisati rad Inliner-a, kao vodećeg igrača u poboljšanju rada kompajlera. GHC Inliner pokušava učiniti što je više moguće umetanja u jednom prolazu. Pošto umetanje često otkriva nove mogućnosti za dalje transformacije, Inliner je zapravo deo GHC Simplifikatora (eng. \emph{GHC simplifier}), koji obavlja veliki broj lokalnih transformacija na iterativan način (ili dok se ne postigne određen broj ponavljanja).
 
-U modernoj verziji GHC kompajlera se koristi LLVM (eng. \emph{Low-Level Virtual Machine}) u završnoj fazi generisanja k\^{o}da. LLVM u sebi ima ugrađene mnogobrojne optimizacije, tako da ako je neka preskočena u Core optimizaciji, LLVM će je obuhvatiti.
+U modernoj verziji GHC kompajlera se koristi LLVM u završnoj fazi generisanja k\^{o}da. LLVM u sebi ima ugrađene mnogobrojne optimizacije, tako da ako je neka preskočena u Core optimizaciji, LLVM će je obuhvatiti.
 
 \subsection{Umetanje i beta redukcija}
 \label{subsec:podnaslovInlineBeta}
@@ -58,9 +58,7 @@ Korisno je razlikovati dva slučaja umetanja:
 \end{enumerate}
 
 U slučaju SGNF-a (eng. \emph{WHNF}), kompromis je između veličine k\^{o}da i koristi od umetanja. Primene atoma i konstruktora su 
-jednostavne: uvek su dovoljno male da bi se umetale. (Konstruktori moraju imati atomične argumente). Funkcije, za 
-razliku od toga, mogu biti velike, tako da efekat neograničenih umetanja u odnosu na veličinu k\^{o}da može biti znatan. Kao i većina 
-kompajlera, koristi se heuristika za odlučivanje kada se radi umetanje funkcija.
+jednostavne: uvek su dovoljno male da bi se umetale. (Konstruktori moraju imati atomične argumente). Funkcije, za razliku od toga, mogu biti velike, tako da efekat neograničenih umetanja u odnosu na veličinu k\^{o}da može biti znatan. Kod većine kompaljera koristi se heuristika za odlučivanje kada se radi umetanje funkcija.
 
 Za Ne-SGNF-u (eng. \emph{Non-WHNF}), pažnja se fokusira na to kako se promenljiva koristi. Ako se promenljiva 
 pojavi samo jednom, onda je verovatno sigurno da ćemo je umetnuti. Inače jedan od naivnih pristupa bi bio da vršimo jednostavnu analizu pojava koja 
