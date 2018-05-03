@@ -172,7 +172,7 @@
 		
 		
 		\item Sadržaj rada u sebi ne sadrži podnaslove. Ne vidim razlog zašto sadržaj rada ne bi bio potpun, izgleda kao da bi stao na prvu stranu uz podnaslove.
-		\odgovor{Sa trenutnom podelom rada na naslove i podnaslove sadržaj ne staje na prvu stranu u celosti sa podnaslovima .}
+		\odgovor{Prva verzija rada sa podelom na naslove i podnaslove nije omogućila da sadržaj stane na prvu stranu u celosti sa podnaslovima.}
 		
 		\item Zamerke oko referenci:
 		\begin{itemize}
@@ -186,11 +186,13 @@
 			
 		\end{itemize}
 		\item Ako se koristi slika sa interneta, možda ne bi škodilo ako bi se u okviru opisa slike dodao i njen autor, u ovom slučaju dovoljno bi bilo dodati referencu [2]-"why is Haskell difficult." uz napomenu da je slika odatle preuzeta.
+		
 		\odgovor{Dodata referenca odakle je slika preuzeta.}
 		
 		\item Pošto se u radu koriste termini iz lambda računa, trebalo bi da postoji uvod u lambda račun ili referenca gde se može naći detaljan opis ove teme. Za predlog rešenja pročitajte narednu zamerku.
 		
 		\item Pošto se ovaj rad nastavlja na rad iz prethodne godine, to bi se moglo naznačiti u uvodu rada, uz referencu ka prošlogodišnjem radu. Takođe bi se moglo navesti da su tamo opisane teorijske osnove lambda računa koje su neophodno predznanje za razumevanje ovog rada.
+		
 		\odgovor{TODO - Srediti uvod i dodati referencu ka radu od prošle godine}
 		
 		\item U uvodu u Haskell bi trebalo dodati da je haskel čist funkcionalni jezik, i potencijalno objasniti šta to znači.
@@ -276,6 +278,8 @@
 		
 		\item Na samom početku sekcije 2.1 se nalaze tri paragrafa koja su jedva duža od jednog reda. Lepše bi izgledalo ako bi se preformulisalo.
 		
+		\odgovor{TODO}
+		
 		\item Pravopisna greška (sekcija 2.3):\\
 		"koristeći strukture koje apstrahtuju"\\
 		"koristeći strukture koje APSTRAHUJU"
@@ -311,11 +315,17 @@
 		eliminacija mrtvog koda (eng. dead code elimination) - odbacuje
 		let VEZIVANJA KOJA se više ne koriste.
 		
+		\odgovor{Ispravjeno}
+		
 		\item U sekciji 3.1.1 dovoljno je jednom prevesti skraćenicu SGNF na engleski. Umesto naknadog ponavljanja prevoda, bolje je koristiti samo skraćenicu na srpskom ili samo skraćenicu na engleskom.
+		
+		\odgovor{Prihvaćeno i samo jednom je prevedena skraćenjica}
 		
 		\item Pravopisna greška (sekcija 3.1.2):\\	
 		"Nažalost, većini linearnih sistema je neadekvatna,"\\
 		nažalost, VEĆINA linearnih sistema je neadekvatna,
+		
+		\odgovor{Ispravjeno}
 		
 		\item CoreSyn se pojavljuje u drugom poglavlju, gde je opisan kao međujezik GHC-a, nema potrebe da se ponovo to napominje u sekciji 4, takodje zašto je u zagradama opisano šta je, i zašto je na engleskom. Naredni deo teksta u sekciji 4 bi trebalo preformulisati:\\
 		=====================================\\
@@ -323,9 +333,13 @@
 		prevodi u StgSyn (GHC's intermediate language)\\
 		=====================================
 		
+		\odgovor{TODO}
+		
 		\item Pravopisna greška (sekcija 4.1):\\
 		"osobine svođenja i komapiliranja na C"\\
 		osobine svođenja i KOMPILIRANJA/KOMPILACIJE na C
+		
+		\odgovor{Ispravjeno}
 		
 	\end{enumerate}
 	
@@ -379,6 +393,8 @@
 		\item Da li su slike i tabele funkcionalne i adekvatne?\\
 		Jesu, sa malom zamerkom da bi možda tabela bila opisnija, ako bi se elementi sortirali od najsporijeg ka najbržem.
 		
+		\odgovor{TODO - Miki odluči kako ćemo ih sortirati}
+		
 	\end{enumerate}
 	
 	\section{Ocenite sebe}
@@ -412,7 +428,7 @@
 	
 	U poglavlju 3, radi povećanja čitljivosti i razumljivosti rada, treba na početku svake faze ukratko istaći šta je suština te faze, koji je njen glavni cilj ili koji to problem u ovoj fazi pokušavamo da rešimo. Takodje treba napraviti jasniju podelu šta ova faza obuhvata i koje su njen podfaze.
 	
-	\odgovor{TODO - Biće sređeno}
+	\odgovor{Jasnija podela je napravljenja, a samim tim je dodato i nešto ukratko o samoj fazi pre primera.}
 	
 	
 	\section{Sitne primedbe}
@@ -454,8 +470,12 @@
 		\item Da li je nešto važno propušteno?\\
 		U radu nisu objašnjini osnvni problemi pri prevođenju funkcionalnih programskih jezika i razlike u odnosu na prevđenje imperativnih programskih jezika
 		
+		\odgovor{TODO - Prethodno je već bilo reči da dodamo ovo u abstrakt, treba to srediti}
+		
 		\item Da li ima suštinskih grešaka i propusta?\\
 		Podela \emph{Middle end} faze na podfaze nije lepo objašnjena u uvodu pa zbunjue čitaoce. U uvodu je rečeno da se primenjuju  optimizacije poput umetanja koda, eliminacije zajedničkih podizrara i izbacivanje mrtvog koda. Zatim se objašnjava umetanja i tri transformacije povezane sa umetanjem i jednostavno umetanje za koje nije jasno naznačeno gde pripada. Zatim se prelazi na objašnjavanje transformacije uslova.
+		
+		\odgovor{Kao što je i ranije u uvodu pisalo u okviru middle end faze, odlučili smo da opišemo samo umetanje kao najznačajniju optimizaciju, a druge metode optimizacije su pobrojane, ali kako nisu toliko značajne nisu ni opisane. Što se tiče dela za jednostavno umetanje jeste bio nejasan, jer je došlo do problema u prevođenu stoga je to ispravljeno. Što se tiče transformcije uslova nije napisano šta je tu tačno zbunilo recezenta, tako da to nije bilo nikakvih većih izmena.}
 		
 		\item Da li je naslov rada dobro izabran?\\
 		Jeste. Naslov rada lepo oslikava njegov sadržaj.
