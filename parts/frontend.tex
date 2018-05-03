@@ -2,12 +2,12 @@
 \label{sec:frontend}
 
 Kao što smo rekli, frontend je prva faza u kojoj se izvorni k\^{o}d pretvara u Core jezik. Sastoji se od:
-	 \begin{enumerate}
-	 	\item Parsiranja (eng. \emph{Parser})
-	 	\item Promene imena (eng. \emph{Rename}) 
-	 	\item Provere tipa (eng. \emph{Typecheck})
-	 	\item Prečišćavanja (eng. \emph{Desugaring})
-	 \end{enumerate} 
+\begin{enumerate}
+	\item Parsiranja (eng. \emph{Parser})
+	\item Promene imena (eng. \emph{Rename}) 
+	\item Provere tipa (eng. \emph{Typecheck})
+	\item Prečišćavanja (eng. \emph{Desugaring})
+\end{enumerate} 
 
 
 \subsection{Parsiranje}
@@ -15,38 +15,40 @@ Kao što smo rekli, frontend je prva faza u kojoj se izvorni k\^{o}d pretvara u 
 
 Pravljenje preciznog parsera u konkretnom jeziku je jako teško. GHC-ov parser se služi sledećim principom: 
 
-\textit{Često se parsira “previše velikodušno”,  a zatim odbacujemo loše slučajeve.}
+\textit{Često se parsira “previše velikodušno”, a zatim odbacujemo loše slučajeve.}
 
-\textbf{Paterni} (eng. \emph{Pattern}) su parsirani kao izrazi i transformisani iz \textit{HsExpr.HsExp} u \textit{HsPat.HsPat}. Izraz kao što je
+\textbf{Šabloni} (eng. \emph{Pattern}) su parsirani kao izrazi i transformisani iz \textit{HsExpr.HsExp} u \textit{HsPat.HsPat}. Izraz kao što je
 \begin{verbatim}
-	[ x | x <- xs]
+[ x | x <- xs]
 \end{verbatim}  
-koji ne izgleda kao patern je odbijen.
+koji ne izgleda kao patern se odbacuje.
 
-Ponekad “previše velikodušno” parsiranje izvršava samo “renamer”. Na primer:
-Infiksni operatori  su parsirani kao da su svi levo asocijativni. “Renamer” koristi deklaracije ispravnosti za ponovno povezivanje sintaksnog stabla. Dobra karakteristika ovog pristupa je to da poruke o grešci kasnije  tokom kompilacije imaju tendenciju da pruže mnogo korisnije informacije. Greške generisane od strane samog parsera imaju tendenciju samo da ukažu na to da se greška desila na određenoj liniji i ne pružaju nikakve dodatne informacije.
+Ponekad “previše velikodušno” parsiranje izvršava samo mehanizam za preimenovanje (eng. \emph{renamer}).
+
+Na primer:
+Infiksni operatori  su parsirani kao da su svi levo asocijativni. Renamer koristi deklaracije ispravnosti za ponovno povezivanje sintaksnog stabla. Dobra karakteristika ovog pristupa je ta da poruke o greškama kasnije tokom kompilacije imaju tendenciju da pruže mnogo korisnije informacije. Greške generisane od strane samog parsera imaju tendenciju samo da ukažu na to da se greška desila na određenoj liniji i ne pružaju nikakve dodatne informacije.
 
 \subsection{Promena imena}
 \label{subsec:podnaslovRename}
 
-Osnovni zadatak Renamer-a je da zameni RdrNames sa Names. Na primer, imamo:
+Osnovni zadatak renamer-a je da zameni RdrNames sa Names. Na primer, imamo:
 
 \begin{verbatim}
-	module K where
-	f x = True
-	
-	module N where
-	import K
-	
-	module M where
-	import N( f ) as Q
-	f = (f, M.f, Q.f, \f -> f)
+module K where
+f x = True
+
+module N where
+import K
+
+module M where
+import N( f ) as Q
+f = (f, M.f, Q.f, \f -> f)
 \end{verbatim}
 u kome su sve promenljive tipa RdrName. 
 
-Rezultat preimenovanja modula M je :
+Rezultat preimenovanja modula M je:
 \begin{verbatim}
-	M.f = (M.f, M.f, K.f, \f_22 -> f_22)
+M.f = (M.f, M.f, K.f, \f_22 -> f_22)
 \end{verbatim} 
 gde su sada sve promenljive tipa Name.
 \begin{itemize}
@@ -59,28 +61,29 @@ gde su sada sve promenljive tipa Name.
 Pored ovoga, renamer radi i sledeće stvari:
 \begin{itemize}
 	\item Vrši analizu zahteva za uzajmno rekurzivne grupe deklaracija. Ovo deli deklaracije u snažno povezane komponente.
-	\item Izvršava veliki broj provera grešaka: promenljive van opsega, neiskorišćene biblioteke koje su uključene\ldots
-	\item Renamer se nalazi između parsera i typechecker-a; ipak, njegov rad je isprepletan sa typechecker-om.
+	\item Izvršava veliki broj provera grešaka: promenljive van opsega, neiskorišćene biblioteke koje su uključene\ldots	
 \end{itemize}
+
+Renamer se nalazi između parsera i typechecker-a; ipak, njegov rad je isprepletan sa typechecker-om.
 
 \subsection{Provera tipa}
 \label{subsec:podnaslovTypecheck}
 
-Verovatno najvažnija faza u frontend-u je kontrolor tipa (eng. \emph{type checker}), koji se nalazi u \underline{compiler/typecheck/}. GHC proverava programe u njihovoj originalnoj Haskel formi pre nego što ih desugar \ref{subsec:podnaslovDesugar} konvertuje u Core k\^{o}d. Ovo umnogome komplikuje type checker ali poboljšava poruke o grešci.
+Verovatno najvažnija faza u frontend-u je mehanizam za proveru tipa (eng. \emph{typechecker}), koji se nalazi u \underline{compiler/typecheck/}. GHC proverava programe u njihovoj originalnoj Haskel formi pre nego što ih desugar \ref{subsec:podnaslovDesugar} konvertuje u Core k\^{o}d. Ovo umnogome komplikuje typechecker, ali poboljšava poruke o grešci.
 
 GHC definiše apstraktnu sintaksu Haskel programa u \\ \underline{compiler/hsSyn/hsSyn/HsSyn.hs}  koristeći strukture koje apstrahuju konkretnu reprezentaciju graničnih pojavljivanja identifikatora i paterna.
 
-Interfejs typechecker-a ostatku kompajlera obezbeđuje \\ \underline{compiler/typechecj/TcRnDriver.hs}. Svi moduli se izvršavaju zvanjem tcRnModule, i GHCI koristi tcRnStmt, tcRnExpr 
+Interfejs typechecker-a ostatku kompajlera obezbeđuje \\ \underline{compiler/typecheck/TcRnDriver.hs}. Svi moduli se izvršavaju zvanjem tcRnModule, i GHCI koristi tcRnStmt, tcRnExpr 
 i tcRnType za proveru iskaza, izraza i tipova, redom.
 
-Funkcije tcRnModule i tcRnModuleTcRnM kontrolišu kompletnu statičku analizu Haskel modula. Oni razrešavaju sve import iskaze, iniciraju stvarni postupak preimenovanja i provere tipa i završavaju sa obradom izvoza (eng. \emph{Export list}).
+Funkcije tcRnModule i tcRnModuleTcRnM kontrolišu kompletnu statičku analizu Haskel modula. Oni razrešavaju sve import iskaze, iniciraju stvarni postupak preimenovanja i provere tipa i završavaju sa obradom izvoza (eng. \emph{export list}).
 
 Reprezentacija tipova je fiksirana u modulu TypeRep i eksportovana kao podatak tipa Type.
 
 \subsection{Prečišćavanje}
 \label{subsec:podnaslovDesugar}
 
-Prečišćavanje prevodi iz masivnog HsSyn tipa u GHC-ov međujezik CoreSyn. Obično se prečišćavanje programa izvršava pre faza provere tipa, ili preimenovanja, jer to onda olakšava posao renamer-u i typechecker-u jer imaju mnogo manji jezik za obradu.
+Prečišćavanje prevodi iz masivnog HsSyn tipa u GHC-ov međujezik CoreSyn. Obično se prečišćavanje programa izvršava pre faza provere tipa, ili preimenovanja, jer to onda olakšava posao renamer-u i typechecker-u, jer imaju mnogo manji jezik za obradu.
 
 \subsection{Core jezik}
 \label{subsec:podnaslovCore}

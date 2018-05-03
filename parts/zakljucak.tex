@@ -1,5 +1,6 @@
 \section{Zaključak}
 \label{sec:zakljucak}
 
-Implementacija funkcionalnih jezika predstavlja veoma težak posao i obimnu temu. U ovom radu fokus je na kompilaciji
-funkcionalnih jezika, najviše na procesu transformacije funkcionalnog koda u Haskel-u. Čitalac bi trebalo da, nakon čitanja ovog rada, bude upoznat sa teorijskim osnovama kompiliranja funkcionalnih jezika, razume transformaciju izvornog koda i bude u stanju da samostalno istražuje na ovu temu.
+Implementacija funkcionalnih jezika predstavlja veoma težak posao i obimnu temu. U ovom radu fokus je na kompilaciji funkcionalnih jezika, najviše na procesu transformacije funkcionalnog koda u Haskel-u. Čitalac bi trebalo da, nakon čitanja ovog rada, bude upoznat sa teorijskim osnovama kompiliranja funkcionalnih jezika, razume transformaciju izvornog koda i bude u stanju da samostalno istražuje na ovu temu.
+U našem radu smo se fokusirali na prevodenje izvnornog koda do mašinskog jezika. Taj proces se sastoji od 3 faze : frontend, middle end i backend. U radu su detaljno opisane kljucne faze za efikasnost prevodenja i jedan od najvažnijih razloga za, danas široku upotrebu Haskel jezika. Te faze su transformacija koda i LLVM framework.
+GHC kompajler je u stalnom razvoju, a trenutno programeri se najviše fokusiraju na razvoj strategija izvođenja, razne strukture koje bi omogućile efikasniji rad skupljača djubreta(eng. \emph{garbage collector}) i na unapređenje izuzetaka pri prekorečenju heap memorije(dosadašnje verzije izbacuju nedostatke samo pri određenim okolnostima).
