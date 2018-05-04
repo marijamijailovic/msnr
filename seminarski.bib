@@ -1,297 +1,101 @@
-% na pocetku su sabloni za razlicite tipove dokumenata
-% mogu se obrisati ako ne prolaze kompilaciju
-
-
-@book{SifBook,
-  author = "",
-  title = "",
-  publisher = "",
-  volume = "",
-  address = {London},
-  year = "XXXX",
-  isbn={9781848822405},
-  url={http://books.google.rs/books?id=5hFnaDQ1jiAC}
-}
-
-@article{SifArticle,
-  author = "",
-  title = "",
-  journal = "",
-  year = "XXXX"
-}
-
-@misc{SifMisc,
-  author = "",
-  title = "",
-  howpublished = "",
-  year = "XXXX",
-  month = "",
-  note = ""
-}
-
-@conference{SifConference,
-  author = "",
-  title = "",
-  booktitle = "",
-  editor = "",
-  volume = "",
-  number = "",
-  series = "",
-  pages = "",
-  address = "",
-  year = "XXXX",
-  month = "",
-  publisher= "",
-  note = ""
-}
-
 @misc{GHCxx,
 	title = {{The Glasgow Haskell, Current Status}},
-	howpublished ={ \url{https://ghc.haskell.org/}}
-	author = {},
-	year = {},
-	month = "",
-	note = {}
+	note = {on-line at  \url{https://ghc.haskell.org/trac/ghc}},
+	author = {Edgewall Software},
+	year = {2018}
 }
 
 
 @misc{StanfordGHC,
 	title = {Why is Haskell difficult},
-	howpublished={\url{http://www.scs.stanford.edu/11au-cs240h/notes/ghc.html}}
-	author = {},
-	year = {},
-	month = "",
-	note = {}
+	note = {on-line at \url{http://www.scs.stanford.edu/11au-cs240h/notes/ghc.html}},
+	author = {Stanford University},
+	year = {2018}
 }
 
 @book{Has10,
+	title = {{Haskell 2010 Language Report}},
 	author = "Simon Marlow (editor)",
-	title = "Haskell 2010 Language Report",
-	publisher = "Haskell community",
-	volume = "",
-	number = "",
-	series = "",
-	address = "Cambridge",
-	edition = "",
-	year = "2010",
-	month = "April",
-	note = ""
+	publisher = {Haskell community},
+	year = {2010},
+	month = {April}
 }
 
 @book{Launchbury,
-	author = "John LaunchburySimon L Peyton Jones",
-	title = "LISP and Symbolic Computation",
-	publisher = "Kluwer Academic Publishers",
-	volume = "",
-	address = "",
-	year = "1995",
+	title = {{LISP and Symbolic Computation}},
+	author = "John Launchbury Simon L Peyton Jones",
 	isbn={1573-0557},
-	url={https://doi.org/10.1007/BF01018827}
+	note = {on-line at \url{https://doi.org/10.1007/BF01018827}},
+	year = {1995},
+	publisher = {Kluwer Academic Publishers}
+}
+
+@book{appel,
+	title = {{Compiling with Continuations}},
+	author = "Andrew W.Appel",
+	isbn={9780521033114},
+	year = "2007",
+	publisher = {Princeton University, New Jersey}
 }
 
 @article{transformation-based-optimiser-Haskell,
 	author = {Simon L Peyton Jones,Andre L M Santos},
-	journal ={{Science of Computer Programing}},
-	pages = {3-47},
 	title = {{On Computable Numbers, with an application to the Entscheidungsproblem}},
+	journal ={{Science of Computer Programing}},
+	year = {1997},
 	volume = {32/1},
-	year = {1997}
+	pages = {3-47}
 }
 
-@book{Launchbury,
-	author = "John LaunchburySimon L Peyton Jones",
-	title = "LISP and Symbolic Computation",
-	publisher = "Kluwer Academic Publishers",
-	volume = "",
-	address = "",
-	year = "1995",
-	isbn={1573-0557},
-	url={https://doi.org/10.1007/BF01018827}
-}
 
 @article{Cinliner,
 	author = "JM Davidson, AM Holler",
 	title = "A study of C function inliner",
-	year = "1988",
-	journal = "Software - Practice and Experience"
+	journal = "Software - Practice and Experience",
+	year = "1988"
 }
 
 @article{inliner,
 	author = {Simon L Peyton Jones},
-	journal ={{Journal of Functional Programming}},
-	pages = {393-434},
 	title = {{Secrets of the Glasgow Haskell Compiler inliner }},
+	journal ={{Journal of Functional Programming}},
+	year = {2002},
 	volume = {12},
-	year = {2002}
+	pages = {393-434}
 }
 
 @article{turner,
 	author = {DM Turner, PL Wadler, C Mossin},
-	journal ={{La Jolla}},
-	pages = {},
 	title = {{Once upon a type}},
-	volume = {12},
-	year = {1995}
-}
-
-@book{appel,
-	author = "Andrew W.Appel",
-	title = "Compiling with Continuations",
-	publisher = "Princeton University, New Jersey",
-	volume = "",
-	address = "",
-	year = "2007",
-	isbn={9780521033114}
-}
- 
-@mastersthesis{Rei12,
-  author = "Nico Reißmann",
-  title = "Utilizing the Value State Dependence Graph for Haskell",
-  school = "University of Gothenburg, Chalmers University of Technology",
-  type = "master diploma thesis",
-  address = "Göteborg, Sweden",
-  year = "2012",
-  month = "Maj",
-  note = ""
-}
- 
-@misc{GHC13,
-  author = {Takenobu T.},
-  title = {GHC(STG,Cmm,asm) illustrated\\for hardware persons},
-  year = {2013},
-  note = {on-line at: \url{http://gcc.gnu.org/}}
-}
-
-@techreport{SifTechReport,
-  author = "",
-  title = "",
-  institution = "",
-  type = "",
-  number = "",
-  address = "",
-  year = "XXXX",
-  month = "",
-  note = ""
-}
-
-@article{Int13,
-  author = "Hai Liu and Neal Glew and Leaf Petersen and Todd A. Anderson",
-  title = "The Intel Labs Haskell Research Compiler",
-  journal = "ACM",
-  volume = " 978-1-4503-2383-3/13/09.",
-  number = "",
-  pages = "105-116",
-  year = "2013",
-  month = "Septembar",
-  note = ""
+	journal ={{La Jolla}},
+	year = {1995},
+	volume = {12}
 }
 
 @article{SPJ92,
-  author = "Simon L Peyton Jones",
-  title = "Implementing lazy functional languages on stock hardware:
-the Spineless Tagless G-machine",
-  journal = "Journal of Functional Programming",
-  volume = "2",
-  number = "",
-  pages = "127-202",
-  year = "1992",
-  month = "Septembar",
-  note = ""
+	author = {Simon L Peyton Jones},
+	title = {{Implementing lazy functional languages on stock hardware:
+	the Spineless Tagless G-machine}},
+	journal = {{Journal of Functional Programming}},
+	month = {Septembar},
+	year = {1992},
+	volume = {2},
+	pages = {127-202}
 }
 
 @article{Ter10,
-  author = "David A. Terei and Manuel M. T. Chakravarty",
-  title = "An LLVM Backend for GHC",
-  journal = "University of New South Wales",
-  volume = "",
-  number = "",
-  pages = "",
-  year = "2010",
-  month = "Septembar",
-  note = ""
+	author = {David A. Terei and Manuel M. T. Chakravarty},
+	title = {{An LLVM Backend for GHC}},
+	journal = {{University of New South Wales}},
+	month = {Septembar},
+	year = {2010}
 }
 
 @techreport{C--05,
- author = "Norman Ramsey and Simon Peyton Jones and Christian Lindig",
- title = "The C-- Language Specification, Version 2.0, ( CVS Revision 1.128 ) ",
- institution = "Cminusminus",
- type = "",
- number = "",
- address = "",
- year = "2005",
- month = "Februar",
- note = {on-line at: \url{https://www.st.cs.uni-saarland.de/publications/files/ramsey-cmm-2005.pdf}}
-}
-
-@misc{Mut13,
-  author = {Rahul Muttineni},
-  title = {Haskell on the JVM with Eta},
-  year = {2013},
-  note = {on-line at: \url{http://www.stanford.edu/}}
-}
-
-@misc{Mut1313,
-  author = {Rahul Muttineni},
-  title = {LLVM Project Blog},
-  note = {teza - pogledati referencu on-line at: \url{http://www.stanford.edu/}},
-  year = {2010},
-  month = "Maj"
-}
-
-@misc{Bha13,
-  author = {Siddharth Bhat},
-  title = {Simplexhc - a STG to LLVM compiler},
-  note = {teza - pogledati referencu on-line at: \url{http://www.stanford.edu/}},
-  year = {2010},
-  month = "Maj"
-}
-
-
-@mastersthesis{She08,
-  author = "jeremy w. sherman",
-  title = "COMPILING IMPERATIVE AND FUNCTIONAL LANGUAGES",
-  school = "New College of Florida, Sarasota",
-  type = "master diploma thesis",
-  address = "",
-  year = "2008",
-  month = "Maj",
-  note = ""
-}
-
-@misc{Ler02,
-  author = {Xavier Leroy},
-  title = {Compiling functional languages},
-  year = {2002},
-  month = "Mart",
-  note = {Spring school “Semantics of programming languages”}
-}
-
-@misc{Ler0202,
-  author = {},
-  title = {I know kung fu: learning STG by example},
-  year = {},
-  month = "",
-  note = {https://ghc.haskell.org/trac/ghc/wiki/Commentary/Compiler/GeneratedCode}
-}
-
-@misc{Doe14,
-  author = {Dan Doel},
-  title = {Introduction to Low Level Haskell Optimization},
-  year = {2014},
-  month = "Septembar",
-  note = {https://ghc.haskell.org/trac/ghc/wiki/Commentary/Compiler/GeneratedCode}
-}
-
-@article{Dij08,
-  author = "Atze Dijkstra and Jeroen Fokker, and S. Doaitse Swierstra",
-  title = "The Structure of the Essential Haskell Compiler, 
-  or Coping with Compiler Complexity",
-  journal = "University of New South Wales",
-  publisher = "Springer-Verlag Berlin Heidelberg",
-  volume = "",
-  number = "",
-  pages = "57-74",
-  year = "2008",
-  month = "",
-  note = ""
+	author = {Norman Ramsey and Simon Peyton Jones and Christian Lindig},
+	month = {Februar},
+	year = {2005},
+	title = {The C-- Language Specification, Version 2.0, ( CVS Revision 1.128 ) },
+	institution = {Cminusminus},
+	note = {on-line at: \url{https://www.st.cs.uni-saarland.de/publications/files/ramsey-cmm-2005.pdf}}
 }

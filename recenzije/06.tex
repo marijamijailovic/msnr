@@ -19,7 +19,7 @@
 
 \begin{document}
 	
-	\title{Dopunite naslov svoga rada\\ \small{Dopunite autore rada}}
+	\title{Etape prevođenja Haskela do mašinskog jezika\\ \small{Marija Mijailović, Miroslav Mišljenović, Nemanja Antić, Filip Lazić}}
 	
 	\maketitle
 	
@@ -52,7 +52,7 @@
 	Suštinski, rad sadrži sve što se od teme zahteva. Međutim, postoje neke stvari koje bi mogle da se isprave kako bi rad bio zanimljiviji čitaocu. Trebalo bi objasniti neke pojmove, koji se pominju u tekstu, ukratko kako bi se čitalac podsetio ili upoznao sa pojmom. \\ Smatram da bi bilo korisno u podglavlju \textbf{1.1 Haskel} dodati primer kratkog koda napisanog u Haskel programskom jeziku i na taj način približiti Haskel običnom čitaocu. U podglavlju \textbf{2 Frontend} postoje četiri podnaslova koja bi mogla biti zanimljivija običnom čitaocu da im se drugačije pristupilo (npr. u podnaslovu \textbf{2.1 Parsiranje} kaže se \textit{"Paterni su parsirani kao izraz i transformisani iz HsExpr.HsExp u HsPat.HsPat. Izraz kao sto je [ x | x <- xs] koji ne izgleda kao patern je odbijen."} - Šta znači ova transformacija koja se spominje u prvoj rečenici i kakav je to izraz koji izgleda kao patern?). Sličan problem postoji i u podglavlju \textbf{4 Backend}, gde se govori \textit{"Kod prevodenja jezika Core u neki imperativni međujezik kao sto je
 		C- - postoji više etapa. Prvo se CoreSyn (GHC's intermediate language) prevodi u StgSyn (GHC's intermediate language), i to u dve faze..."}. Bilo bi dobro približiti svakom čitaocu značenje pojmova \textit{CoreSyn} i \textit{StgSyn}.\\
 	Još jedna sugestija je vezana za navođenje literature. Literatura nije dobro napisana, neki linkovi ne otvaraju prave strane ili sadrže samo naslov (pritom nije jasno da li je to naslov knjige, članka ili nečega drugog). Literatura koja je nedovoljno opisana je \textit{[2] Why is haskell diffcult. http://www.scs.stanford.edu/11au-cs240h/notes/ghc.html/}.\\ 
-	\odgovor{1.1 Haskel - TODO\\2.Frontend - TODO\\4.Backend - TODO\\Literatura - Navedeni link je popravljen. TODO(Pogledati da li postoji još neki neispravni linkove)}
+	\odgovor{1.1 Haskel - TODO\\2.Frontend - TODO\\4.Backend - TODO\\Literatura - Link je popravljen. Takođe su sređeni i svi naslovi, kako knjiga, tako i članaka.}
 	% Напишете своја запажања и конструктивне идеје шта у раду недостаје и шта би требало да се промени-измени-дода-одузме да би рад био квалитетнији.
 	
 	\section{Sitne primedbe}
@@ -120,7 +120,9 @@
 		Navedena literatura odgovara temi i tekstu autora. Literatura govori o Haskel jeziku, funkcionalnim jezicima uopšteno, specifikacijama C-- jezika, pravilima transformacija itd. 
 		\item Da li su u radu reference korektno navedene?\\
 		U tekstu ima više referenci. Međutim, u nekim delovima nije baš jasno na koji deo teksta se odnose navedene reference (da li na jednu rečenicu ili na veći deo teksta).
-		\odgovor{TODO-Srediti reference}
+		
+		\odgovor{Ako se referenca nalazi na kraju pasusa, odnosi se na taj pasus, a ako se nalazi umetnuta u okviru pasusa odnosi se na taj deo rečenice.}
+		
 		\item Da li je struktura rada adekvatna?\\
 		Struktura rada je adekvatna. Rad je podeljen na delove na osnovu faza prevođenja koda koje su objašnjene u tekstu.
 		\item Da li rad sadrži sve elemente propisane uslovom seminarskog rada (slike, tabele, broj strana...)?\\
@@ -172,16 +174,21 @@
 		
 		
 		\item Sadržaj rada u sebi ne sadrži podnaslove. Ne vidim razlog zašto sadržaj rada ne bi bio potpun, izgleda kao da bi stao na prvu stranu uz podnaslove.
-		\odgovor{Prva verzija rada sa podelom na naslove i podnaslove nije omogućila da sadržaj stane na prvu stranu u celosti sa podnaslovima.}
+		
+		\odgovor{Prva verzija rada sa podelom na naslove i podnaslove nije omogućila da sadržaj stane na prvu stranu u celosti sa podnaslovima. Sada je napravljena nova podela u okviru treće glave na podsekcije, pa sadržaj staj eu celosti na prvu stranu sa podnaslovima.}
 		
 		\item Zamerke oko referenci:
 		\begin{itemize}
 			\item Sve reference u kojima se nalaze linkovi ka veb stranama bi takođe trebalo da sadrže i datum pristupa veb strani.
 			
+			\odgovor{Dodat je datum, tj godina pristupa stranici.}
+			
 			\item Referenca [2]. Link sadrži kosu crtu viška na samom kraju, zbog koje ne pokazuje na željenu stranu.
+			
 			\odgovor{Izbrisana kosa crta.}
 			
 			\item Referenca [9]. Link pokazuje na veb stranu na kojoj se nalaze korisni materijali o Windows operativnim sistemima, da li je ovo zaista pravi link?
+			
 			\odgovor{U pitanju je bila greška, sada je ispravljeno.}
 			
 		\end{itemize}
@@ -199,10 +206,14 @@
 		
 		\item Kroz ceo podparagraf 3.1 se prožima primer koji nije adekvatno objašnjen. Iz primera izgleda da su a,b,c konstante, ali tako nešto bi trebalo da eksplicitno bude napomenuto.
 		
+		\odgovor{Eksplicitno je navedeno da su to konstante.}
+		
 		\item U 4.1 sekciji piše:
 		"Takođe, C ne podržava repnu rekurziju, pristup steku radi čišćenja memorije(eng. garbage collection) i još mnogo drugih stvari."
 		
 		C podržava repnu rekurziju, ali ne podržava eliminaciju repne rekurzije, da li ste na ovo mislili? Ne znam na šta ste mislili u drugom delu rečenice. Jezik C programeru daje potpunu kontrolu nad memorijom. C nema automatski način čišćenja memorije sa heap-a ali ta funkcionalnost se može dodati bilbiotekama kao što je Boehm garbage collector za C i C++.
+		
+		\odgovor{TODO}
 		
 		
 	\end{enumerate}
@@ -428,7 +439,7 @@
 	
 	U poglavlju 3, radi povećanja čitljivosti i razumljivosti rada, treba na početku svake faze ukratko istaći šta je suština te faze, koji je njen glavni cilj ili koji to problem u ovoj fazi pokušavamo da rešimo. Takodje treba napraviti jasniju podelu šta ova faza obuhvata i koje su njen podfaze.
 	
-	\odgovor{Jasnija podela je napravljenja, a samim tim je dodato i nešto ukratko o samoj fazi pre primera.}
+	\odgovor{Jasnija podela je napravljenja u okviru \textit{Middle end-a} sada imamo dve podsekcije \textit{Umetanje} i \textit{Transformacija uslova}, a samim tim je dodato i nešto ukratko o samoj fazi pre samih primera.}
 	
 	
 	\section{Sitne primedbe}
