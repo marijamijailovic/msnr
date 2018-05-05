@@ -4,7 +4,7 @@
 Kod prevođenja jezika Core u neki imperativni međujezik kao što je C-\,- postoji više etapa.
 Prvo se \textit{CoreSyn} prevodi u \textit{StgSyn (GHC’s intermediate language)}, i to u dve faze:
 \begin{enumerate}
-	\item \textbf{CorePrep} - Core-to-Core proces konvertuje program u ANF (eng. \emph{A-normal form}).\cite{GHCxy} A-normalnu formu su osmislili Sabry i Fellisen 1992. god.  U ANF formi svi argumenti moraju biti trivijalni, odnosno vrednost svih argumenata se mora izračunati odmah. ANF se bavi osnovnim definicijama zasnovanim na $\lambda$ računu sa slabom redukcijom i let izrazima uz ograničenja:\\
+	\item \textbf{CorePrep} - Core-to-Core proces konvertuje program u ANF (eng. \emph{A-normal form}) \cite{GHCxy}. A-normalnu formu su osmislili Sabry i Fellisen 1992. god.  U ANF formi svi argumenti moraju biti trivijalni, odnosno vrednost svih argumenata se mora izračunati odmah. ANF se bavi osnovnim definicijama zasnovanim na $\lambda$ računu sa slabom redukcijom i let izrazima uz ograničenja:\\
 	- dozvoljene su samo konstante, $\lambda$ termovi i promenljive kao argumenti funkcije\\
 	- zahtev da rezultat netrivijalnih izraza pripada let-povezanoj promenljivoj ili vraćen iz funkcije. \\ \\
 	Primer ANF: \\ f(g(x),h(y))\\
