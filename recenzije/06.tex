@@ -213,7 +213,8 @@
 		
 		C podržava repnu rekurziju, ali ne podržava eliminaciju repne rekurzije, da li ste na ovo mislili? Ne znam na šta ste mislili u drugom delu rečenice. Jezik C programeru daje potpunu kontrolu nad memorijom. C nema automatski način čišćenja memorije sa heap-a ali ta funkcionalnost se može dodati bilbiotekama kao što je Boehm garbage collector za C i C++.
 		
-		\odgovor{TODO}
+		\odgovor{Pogrešno je formulisana rechenica. Moguće je implementirati repnu rekurziju u C-u, no C nema efikasan način da je sprovede zbog same konstrukcije ovog jezika upravo zbog načina na koji koristi stek. Rečenica je preformulisana. Naravno, slažem se da u C-u imamo potpunu kontrolu nad memorijom, ali ovaj princip u kome bi GHC svodio program na C je vrlo star, a u to vreme verovatno nije postojala adekvatna podrška koja bi dala efikasan način. Na linku: https://llvm.org/pubs/2010-09-HASKELLSYM-LLVM-GHC.pdf mozete pročitati više o toj diskusiji. Navedena je i referenca u radu.}
+		
 		
 		
 	\end{enumerate}
@@ -344,7 +345,7 @@
 		prevodi u StgSyn (GHC's intermediate language)\\
 		=====================================
 		
-		\odgovor{TODO}
+		\odgovor{Došlo je do greške u imenima. Ispravljeno je i dodate su reference na fajlove iz dokumentacije gde se može više pročitati o CorePrep i CoreToStg fazama}
 		
 		\item Pravopisna greška (sekcija 4.1):\\
 		"osobine svođenja i komapiliranja na C"\\

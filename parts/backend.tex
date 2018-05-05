@@ -2,10 +2,10 @@
 \label{sec:backend}
 
 Kod prevođenja jezika Core u neki imperativni međujezik kao što je C-\,- postoji više etapa.
-Prvo se \textit{CoreSyn (GHC’s intermediate language)} prevodi u \textit{StgSyn (GHC’s intermediate language)}, i to u dve faze:
+Prvo se \textit{CoreSyn} prevodi u \textit{StgSyn (GHC’s intermediate language)}, i to u dve faze:
 \begin{enumerate}
-	\item \textbf{CoreToStg} - Core-to-Core proces konvertuje program u ANF (eng. \emph{A-normal form}). A-normalnu formu su osmislili Sabry i Fellisen 1992. god.  U ANF formi svi argumenti moraju biti trivijalni, odnosno vrednost svih argumenata se mora izračunati odmah. ANF se bavi osnovnim definicijama zasnovanim na $\lambda$ računu sa slabom redukcijom i let izrazima uz ograničenja:
-	- dozvoljene su samo konstante, $\lambda$ termovi i promenljive kao argumenti funkcije
+	\item \textbf{CorePrep} - Core-to-Core proces konvertuje program u ANF (eng. \emph{A-normal form}).\cite{GHCxy} A-normalnu formu su osmislili Sabry i Fellisen 1992. god.  U ANF formi svi argumenti moraju biti trivijalni, odnosno vrednost svih argumenata se mora izračunati odmah. ANF se bavi osnovnim definicijama zasnovanim na $\lambda$ računu sa slabom redukcijom i let izrazima uz ograničenja:\\
+	- dozvoljene su samo konstante, $\lambda$ termovi i promenljive kao argumenti funkcije\\
 	- zahtev da rezultat netrivijalnih izraza pripada let-povezanoj promenljivoj ili vraćen iz funkcije. \\ \\
 	Primer ANF: \\ f(g(x),h(y))\\
 	
@@ -15,7 +15,7 @@ Prvo se \textit{CoreSyn (GHC’s intermediate language)} prevodi u \textit{StgSy
 		\> \> f(v0, v1)
 	\end{tabbing}
 	
-	\item \textbf{CoreToStr} - Rezultat prve faze u velikoj meri odgovara krajnjem StgSyn, zato u ovoj fazi nema preterano mnogo posla. Ova faza dekoriše StgSyn sa mnogo pomoćnih  promenljivih, let-no-escape indikatora.
+	\item \textbf{CoreToStg} - Rezultat prve faze u velikoj meri odgovara krajnjem StgSyn, zato u ovoj fazi nema preterano mnogo posla. Kako god, StgSyn je dekorisan sa mnogo redudantih informacija(slobodnih promenljivih, let-no-escape indikatora...) koji su generisani u letu od strane CoreToStg faze.\cite{GHCxz}
 	
 	STG program se pomoću generatora k\^{o}da (eng. \emph{code generator}) pretvara u neki niži jezik kao što je C-\,- \cite{C--05}.
 	
@@ -24,7 +24,7 @@ Prvo se \textit{CoreSyn (GHC’s intermediate language)} prevodi u \textit{StgSy
 \subsection{GHC k\^{o}d generator}
 \label{sec:podnaslovGHCGenerator}
 
-Glazgov Haskel Kompajler je u početku prevodio k\^{o}d za STG-mašine (eng. \emph{Spineless Tagless G-machine}) na C jezik. Ideja je bila da se iskoriste C kompajleri koji su portabilni i imaju određene dobre optimizacije. Međutim, pokazalo se da C ima mnogo mana u kontekstu jezika srednjeg nivoa (eng. \emph {intermediate language}), posebno za kompilatore lenjih funkcionalnih jezika sa nestandardnom kontrolom toka. Takođe, C ne podržava repnu rekurziju, pristup steku radi čišćenja memorije (eng. \emph{garbage collection}) i još mnogo drugih stvari. To nije iznenađujuće, jer C nije dizajniran za to. Pisci kompilatora višeg nivoa kao što je GHC su odlučili da ublaže prethodno navedene nedostatke.
+Glazgov Haskel Kompajler je u početku prevodio k\^{o}d za STG-mašine (eng. \emph{Spineless Tagless G-machine}) na C jezik. Ideja je bila da se iskoriste C kompajleri koji su portabilni i imaju određene dobre optimizacije. Međutim, pokazalo se da C ima mnogo mana u kontekstu jezika srednjeg nivoa (eng. \emph {intermediate language}), posebno za kompilatore lenjih funkcionalnih jezika sa nestandardnom kontrolom toka. Takođe, C nema efikasan način za repnu rekurziju, pristup steku radi čišćenja memorije (eng. \emph{garbage collection}) i još mnogo drugih stvari. To nije iznenađujuće, jer C nije dizajniran za to. Pisci kompilatora višeg nivoa kao što je GHC su odlučili da ublaže prethodno navedene nedostatke.
 
 Problem je trebalo da reše razne ekstenzije GNU C-a. Međutim, i ovo rešenje ima svoje mane kao što je velika zavisnost od GNU C verzije kompilatora. Optimizacija za C često nema efekta na te jezike višeg nivoa - mnogo statičkih informacija bi moglo biti izgubljeno. 
 
