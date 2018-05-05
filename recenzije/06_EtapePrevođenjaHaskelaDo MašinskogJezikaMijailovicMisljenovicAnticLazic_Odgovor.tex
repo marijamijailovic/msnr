@@ -52,7 +52,7 @@
 	Suštinski, rad sadrži sve što se od teme zahteva. Međutim, postoje neke stvari koje bi mogle da se isprave kako bi rad bio zanimljiviji čitaocu. Trebalo bi objasniti neke pojmove, koji se pominju u tekstu, ukratko kako bi se čitalac podsetio ili upoznao sa pojmom. \\ Smatram da bi bilo korisno u podglavlju \textbf{1.1 Haskel} dodati primer kratkog koda napisanog u Haskel programskom jeziku i na taj način približiti Haskel običnom čitaocu. U podglavlju \textbf{2 Frontend} postoje četiri podnaslova koja bi mogla biti zanimljivija običnom čitaocu da im se drugačije pristupilo (npr. u podnaslovu \textbf{2.1 Parsiranje} kaže se \textit{"Paterni su parsirani kao izraz i transformisani iz HsExpr.HsExp u HsPat.HsPat. Izraz kao sto je [ x | x <- xs] koji ne izgleda kao patern je odbijen."} - Šta znači ova transformacija koja se spominje u prvoj rečenici i kakav je to izraz koji izgleda kao patern?). Sličan problem postoji i u podglavlju \textbf{4 Backend}, gde se govori \textit{"Kod prevodenja jezika Core u neki imperativni međujezik kao sto je
 		C- - postoji više etapa. Prvo se CoreSyn (GHC's intermediate language) prevodi u StgSyn (GHC's intermediate language), i to u dve faze..."}. Bilo bi dobro približiti svakom čitaocu značenje pojmova \textit{CoreSyn} i \textit{StgSyn}.\\
 	Još jedna sugestija je vezana za navođenje literature. Literatura nije dobro napisana, neki linkovi ne otvaraju prave strane ili sadrže samo naslov (pritom nije jasno da li je to naslov knjige, članka ili nečega drugog). Literatura koja je nedovoljno opisana je \textit{[2] Why is haskell diffcult. http://www.scs.stanford.edu/11au-cs240h/notes/ghc.html/}.\\ 
-	\odgovor{1.1 Haskel - TODO\\2.Frontend - TODO\\4.Backend - TODO\\Literatura - Link je popravljen. Takođe su sređeni i svi naslovi, kako knjiga, tako i članaka.}
+	\odgovor{Svesni da rad nije lak za čitanje i da se rad nastavlja na rad od prošle godine u uvodu rada smo dodali referencu na link ka radu od prethodne godine, tako da je poželjno da se svaki čitalac upozna sa tim radom pre čitanja načeg.\\Što se tiče primedi navedenih za Fronend i Backend naveden je link ka zvaničnoj stranici GHC gde se čitalac takodje može upoznati sa detaljima ovih procesa, jer bi njihovo objašnjavanje prevazišlo obim ovog seminarskog rada.\\Literatura - Link je popravljen. Takođe su sređeni i svi naslovi, kako knjiga, tako i članaka.}
 	% Напишете своја запажања и конструктивне идеје шта у раду недостаје и шта би требало да се промени-измени-дода-одузме да би рад био квалитетнији.
 	
 	\section{Sitne primedbe}
@@ -107,6 +107,9 @@
 		Smatram da ništa važno nije propušteno u ovom radu. Autori su naveli suštinu teme i zadržali se na bitnim delovima teksta.
 		\item Da li ima suštinskih grešaka i propusta?\\
 		Suštinskih grešaka u ovom radu nema. Propust na koji bi eventualno trebalo da porade je taj što je tekst pisan za posebnu grupu čitalaca (programeri i matematičari), tako da bi mogli učiniti tekst zanimljivijim i drugim čitaocima.
+		
+		\odgovor{Tema rada je takva da je rad namenjen za posebnu grupu čitalaca kojima.}
+		
 		\item Da li je naslov rada dobro izabran?\\
 		Naslov rada predstavlja suštinu onoga o čemu rad govori. S toga smatram da je naslov odgovarajuć i dobro izabran.
 		\item Da li sažetak sadrži prave podatke o radu?\\
@@ -114,6 +117,9 @@
 		\item Da li je rad lak-težak za čitanje?\\
 		Delovi rada nisu laki za čitanje ukoliko čitalac nije upoznat sa Haskel jezikom, jer u tom slučaju čitalac ne može da razume dobro date primere i delove teksta kao što je rečenica "Paterni su parsirani kao izrazi i transformisani iz HsExpr.HsExp u
 		HsPat.HsPat.". Ukoliko je čitalac upoznat sa Haskel jezikom i načinom rada u njemu, ovaj tekst će mu biti lak za čitanje.
+		
+		\odgovor{Obrazloženo već u okviru krupnih primedbi.}
+		
 		\item Da li je za razumevanje teksta potrebno predznanje i u kolikoj meri?\\
 		Predznanje jeste potrebno kako bi se tekst u potpunosti razumeo. Kako bi čitalac razumeo svaki deo teksta trebalo bi da je upoznat sa nekim od tipova u Haskelu, paketa koji se koriste u ovom funkcionalnom jeziku i osnovama ovakve vrste programiranja. Naravno, potrebno je i da ima predstavu o tome šta znači prevođenje izvornog koda u mašinski kod.
 		\item Da li je u radu navedena odgovarajuća literatura?\\
@@ -143,7 +149,7 @@
 	% Obrazložite svoju odluku
 	
 	
-	\chapter{Recenzent \odgovor{--- ocena:} }
+	\chapter{Recenzent \odgovor{--- ocena:5} }
 	
 	
 	\section{O čemu rad govori?}
@@ -166,16 +172,18 @@
 			
 			\item Ukratko opisati oblast prevođenja funkcionalnih jezika, i koji su najveći problemi koji se tu mogu sresti.
 		\end{itemize}
-		\odgovor{TODO - Srediti uvod i dodati referencu ka radu od prošle godine}
+		
+		\odgovor{Sredili smo uvod u skladu sa primedbama, dodali smo sekciju Uvod u Haskel i GHC, dodata je referenca ka radu od prošle godine}
 		
 		
 		\item Zaključak izgleda nepotpuno. Može se opisati koje su sfere koje će se u narednom periodu najviše razvijati kod kompilatora Haskella. Mogu se navesti najvažniji delovi rada, na primer koje su ključne ideje za efikasnost prevođenja Haskella - transformacija koda i LLVM backend framework.
+		
 		\odgovor{Zaključak je upotpunjen}
 		
 		
 		\item Sadržaj rada u sebi ne sadrži podnaslove. Ne vidim razlog zašto sadržaj rada ne bi bio potpun, izgleda kao da bi stao na prvu stranu uz podnaslove.
 		
-		\odgovor{Prva verzija rada sa podelom na naslove i podnaslove nije omogućila da sadržaj stane na prvu stranu u celosti sa podnaslovima. Sada je napravljena nova podela u okviru treće glave na podsekcije, pa sadržaj staj eu celosti na prvu stranu sa podnaslovima.}
+		\odgovor{Prva verzija rada sa podelom na naslove i podnaslove nije omogućila da sadržaj stane na prvu stranu u celosti sa podnaslovima. Sada je napravljena nova podela glava na podsekcije, pa sadržaj staj eu celosti na prvu stranu sa podnaslovima.}
 		
 		\item Zamerke oko referenci:
 		\begin{itemize}
@@ -200,9 +208,11 @@
 		
 		\item Pošto se ovaj rad nastavlja na rad iz prethodne godine, to bi se moglo naznačiti u uvodu rada, uz referencu ka prošlogodišnjem radu. Takođe bi se moglo navesti da su tamo opisane teorijske osnove lambda računa koje su neophodno predznanje za razumevanje ovog rada.
 		
-		\odgovor{TODO - Srediti uvod i dodati referencu ka radu od prošle godine}
+		\odgovor{Sređeno}
 		
 		\item U uvodu u Haskell bi trebalo dodati da je haskel čist funkcionalni jezik, i potencijalno objasniti šta to znači.
+		
+		\odgovor{Zamerku nismo ispravili, jer smatramo da to i nije toliko relevanto za temu rada.}
 		
 		\item Kroz ceo podparagraf 3.1 se prožima primer koji nije adekvatno objašnjen. Iz primera izgleda da su a,b,c konstante, ali tako nešto bi trebalo da eksplicitno bude napomenuto.
 		
@@ -290,7 +300,7 @@
 		
 		\item Na samom početku sekcije 2.1 se nalaze tri paragrafa koja su jedva duža od jednog reda. Lepše bi izgledalo ako bi se preformulisalo.
 		
-		\odgovor{TODO}
+		\odgovor{Da ne bi otišli van obima teme, dodali smo referencu ka objašnjenju ovih delva.}
 		
 		\item Pravopisna greška (sekcija 2.3):\\
 		"koristeći strukture koje apstrahtuju"\\
@@ -305,7 +315,7 @@
 		
 		\item u Sekciji 2.3, podvučeni putevi do fajlova/foldera su vizualno neprijatni. Da li su ove informacije uopšte vredne pomena? Ako jesu da li postoji lepši način da se skrene pažnja na njih, boldovanjem na primer?	
 		
-		\odgovor{TODO - Po meni ovi putevi fajlova nisu potrebni, ali ako se odučimo da ih sačuvamo , italic je lepši.}
+		\odgovor{italic je lepši.}
 		
 		\item Provera iskaza pomenuta dva puta (sekcija 2.3):\\
 		"tcRnStmt, tcRnStmt"
@@ -378,7 +388,7 @@
 		\item Da li sažetak sadrži prave podatke o radu?\\
 		Da, sa tim da bi mogao biti dodat razlog zašto je kompilacija funkcionalnih jezika teška i zašto je bitna.
 		
-		\odgovor{TODO}
+		\odgovor{Dodato je u uvod rada, kao što je predloženo u okviru krupnih zamerki}
 		
 		\item Da li je rad lak-težak za čitanje?\\
 		Na skali od 0-10, gde je nula najlakše, radu bih dao ocenu 4.
@@ -389,7 +399,7 @@
 		\item Da li je u radu navedena odgovarajuća literatura?\\
 		Jedino što nedostaje je rad iz prethodne godine na koji se ovaj rad nastavlja.
 		
-		\odgovor{TODO}
+		\odgovor{Sredjeno}
 		
 		\item Da li su u radu reference korektno navedene?\\
 		Jesu, sa zamerkom da bi uz url veb stranica bilo poželjno da stoji i datum pristupa sajtu.
@@ -397,7 +407,7 @@
 		\item Da li je struktura rada adekvatna?\\
 		Jeste, sa malom zamerkom da bi uvod trebalo da bude odvojen od detaljnijeg opisa Haskell-a i GHC-a.
 		
-		\odgovor{TODO - Videćemo šta možemo uraditi sa ovim.}
+		\odgovor{Odvojeno je}
 		
 		\item Da li rad sadrži sve elemente propisane uslovom seminarskog rada (slike, tabele, broj strana...)?\\
 		Da, svi uslovi su ispunjeni.
@@ -405,7 +415,7 @@
 		\item Da li su slike i tabele funkcionalne i adekvatne?\\
 		Jesu, sa malom zamerkom da bi možda tabela bila opisnija, ako bi se elementi sortirali od najsporijeg ka najbržem.
 		
-		\odgovor{TODO - Miki odluči kako ćemo ih sortirati}
+		\odgovor{Sortirano je od najbržeg ka najsporijem, tako je nama lepše}
 		
 	\end{enumerate}
 	
@@ -421,7 +431,7 @@
 	
 	Srednje sam upućen u datu oblast. Način na koji kompilatori funkcionišu sam imao priliku da naučim na kursu prevođenje programskih jezika u trećoj godini osnovnih studija. Tako da sam bio upoznat sa nekim tehnikama koje se mogu primeniti, ali ni približno ovoliko detaljno i specifično za funkcionalne jezike, sa kojima sam imao priliku da se susretnem u okviru kursa programske paradigme koji je takođe na osnovnim studijama. Na kursu je objašnjena logika prvog reda, i takođe je rađen Haskell.
 	
-	\chapter{Recenzent \odgovor{--- ocena:} }
+	\chapter{Recenzent \odgovor{--- ocena:4} }
 	
 	
 	\section{O čemu rad govori?}
@@ -436,7 +446,7 @@
 	
 	U uvodu nije opisano zašto je prevođenje funkcionalnih programskih jezika teže od prevođena ostalih jeika i koji su glavni problemi sa kojima se susrećemo i koje pokusavamo da rešimo.
 	
-	\odgovor{TODO - Već kritikovano, biće dodato.}
+	\odgovor{Već kritikovano, dodato je}
 	
 	U poglavlju 3, radi povećanja čitljivosti i razumljivosti rada, treba na početku svake faze ukratko istaći šta je suština te faze, koji je njen glavni cilj ili koji to problem u ovoj fazi pokušavamo da rešimo. Takodje treba napraviti jasniju podelu šta ova faza obuhvata i koje su njen podfaze.
 	
@@ -482,7 +492,7 @@
 		\item Da li je nešto važno propušteno?\\
 		U radu nisu objašnjini osnvni problemi pri prevođenju funkcionalnih programskih jezika i razlike u odnosu na prevđenje imperativnih programskih jezika
 		
-		\odgovor{TODO - Prethodno je već bilo reči da dodamo ovo u abstrakt, treba to srediti}
+		\odgovor{Dodato u uvod.}
 		
 		\item Da li ima suštinskih grešaka i propusta?\\
 		Podela \emph{Middle end} faze na podfaze nije lepo objašnjena u uvodu pa zbunjue čitaoce. U uvodu je rečeno da se primenjuju  optimizacije poput umetanja koda, eliminacije zajedničkih podizrara i izbacivanje mrtvog koda. Zatim se objašnjava umetanja i tri transformacije povezane sa umetanjem i jednostavno umetanje za koje nije jasno naznačeno gde pripada. Zatim se prelazi na objašnjavanje transformacije uslova.

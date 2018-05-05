@@ -21,7 +21,7 @@ Pravljenje preciznog parsera u konkretnom jeziku je jako teško. GHC-ov parser s
 \begin{verbatim}
 [ x | x <- xs]
 \end{verbatim}  
-koji ne izgleda kao patern se odbacuje.
+koji ne izgleda kao patern se odbacuje Više o ovome se može pronaći \cite{GHCzz}.
 
 Ponekad “previše velikodušno” parsiranje izvršava samo mehanizam za preimenovanje (eng. \emph{renamer}).
 
@@ -69,11 +69,11 @@ Renamer se nalazi između parsera i typechecker-a; ipak, njegov rad je ispreplet
 \subsection{Provera tipa}
 \label{subsec:podnaslovTypecheck}
 
-Verovatno najvažnija faza u frontend-u je mehanizam za proveru tipa (eng. \emph{typechecker}), koji se nalazi u \underline{compiler/typecheck/}. GHC proverava programe u njihovoj originalnoj Haskel formi pre nego što ih desugar \ref{subsec:podnaslovDesugar} konvertuje u Core k\^{o}d. Ovo umnogome komplikuje typechecker, ali poboljšava poruke o grešci.
+Verovatno najvažnija faza u frontend-u je mehanizam za proveru tipa (eng. \emph{typechecker}), koji se nalazi u \textit{compiler/typecheck/}. GHC proverava programe u njihovoj originalnoj Haskel formi pre nego što ih desugar \ref{subsec:podnaslovDesugar} konvertuje u Core k\^{o}d. Ovo umnogome komplikuje typechecker, ali poboljšava poruke o grešci.
 
-GHC definiše apstraktnu sintaksu Haskel programa u \\ \underline{compiler/hsSyn/hsSyn/HsSyn.hs}  koristeći strukture koje apstrahuju konkretnu reprezentaciju graničnih pojavljivanja identifikatora i paterna.
+GHC definiše apstraktnu sintaksu Haskel programa u \\ \textit{compiler/hsSyn/hsSyn/HsSyn.hs}  koristeći strukture koje apstrahuju konkretnu reprezentaciju graničnih pojavljivanja identifikatora i paterna.
 
-Interfejs typechecker-a ostatku kompajlera obezbeđuje \\ \underline{compiler/typecheck/TcRnDriver.hs}. Svi moduli se izvršavaju zvanjem tcRnModule, i GHCI koristi tcRnStmt, tcRnExpr 
+Interfejs typechecker-a ostatku kompajlera obezbeđuje \\ \textit{compiler/typecheck/TcRnDriver.hs}. Svi moduli se izvršavaju zvanjem tcRnModule, i GHCI koristi tcRnStmt, tcRnExpr 
 i tcRnType za proveru iskaza, izraza i tipova, redom.
 
 Funkcije tcRnModule i tcRnModuleTcRnM kontrolišu kompletnu statičku analizu Haskel modula. Oni razrešavaju sve import iskaze, iniciraju stvarni postupak preimenovanja i provere tipa i završavaju sa obradom izvoza (eng. \emph{export list}).
