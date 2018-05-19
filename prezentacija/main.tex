@@ -32,8 +32,8 @@
     identifierstyle=\color{magenta},
 }
 
-\title[Kompilacija funkcionalnih jezika]{Etape Prevođenja Haskela do mašinskog jezika}
-\author[]{Marija Mijailović, Miroslav Mišljenović\\Nemanja Antić, Filip Lazić}
+\title[Kompilacija funkcionalnih jezika]{Etape prevođenja Haskela do mašinskog jezika}
+\author[]{Miroslav Mišljenović, Marija Mijailović\\Filip Lazić, Nemanja Antić}
 \institute{Matematički fakultet, Beograd}
 \date{21. Maj 2018.}
 
@@ -63,7 +63,7 @@
   		\item Funkcionalna paradigma 
 	  		\begin{itemize}
 	  			\item Matematičke funkcije
-	  			\item Elimininacija bočnih efekta
+	  			\item Elimininacija bočnih efekata
 	  			\item Dokazivanje korektnosti programa
 	  		\end{itemize}
   		\vspace{0.5cm}
@@ -89,13 +89,14 @@
 \begin{frame}{Glazgov Haskel Kompajler (GHC) }
 	\begin{columns}
 		\begin{column}{4cm}
-			
-			Sastoji se iz tri faze:
-			
 			\begin{itemize}
-				\item Frontend - pretvaranje u Core jezik
-				\item Middle end - dodatne optimizacije 
-				\item Backend - STG mašina
+				\item Sastoji se iz tri faze:
+				
+				\begin{itemize}
+					\item Frontend - pretvaranje u Core jezik
+					\item Middle end - dodatne optimizacije 
+					\item Backend - STG mašina
+				\end{itemize}
 			\end{itemize}
 		\end{column}
 		\begin{column}{6cm}
@@ -122,50 +123,60 @@
 \end{frame}
 
 \begin{frame}{Parsiranje i promena imena}
-	Parsiranje:
 	\begin{itemize}
-		\item Šabloni (eng. \emph{Pattern})
-		\item Infiksni operatori
-		\item Poruke o greškama
-	\end{itemize}	
+		\item Parsiranje:
+		\begin{itemize}
+			\item Šabloni (eng. \emph{Pattern})
+			\item Infiksni operatori
+			\item Poruke o greškama
+		\end{itemize}	
+	\end{itemize}
 	
-	Promena imena:
 	\begin{itemize}
-		\item Zamena \textit{RdrNames} sa \textit{Names}
-		\item Analiza zahteva za uzajmno rekurzivne grupe deklaracija
-		\item Veliki broj provera grešaka
-	\end{itemize}	
+		\item Promena imena:
+		\begin{itemize}
+			\item Zamena \textit{RdrNames} sa \textit{Names}
+			\item Analiza zahteva za uzajmno rekurzivne grupe deklaracija
+			\item Veliki broj provera grešaka
+		\end{itemize}	
+	\end{itemize}
+	
 
 \end{frame}
 
 \begin{frame}[fragile]{Promena imena}
-	Primer zamene \textit{RdrNames} sa \textit{Names}:
-	\begin{block}{}
-		module $ K $ where
-		$ f $ $ x $ = True
-		
-		module $ N $ where
-		import $ K $
-		
-		module $ M $ where
-		import $ N( f ) $ as $ Q $ 
-		$f = (f, M.f, Q.f,  \setminus f  -> f) $
-	\end{block}
+	
+		%\item 	Primer zamene \textit{RdrNames} sa \textit{Names}:
+		\begin{block}{Primer zamene \textit{RdrNames} sa \textit{Names}:}
+			module $ K $ where
+			$ f $ $ x $ = True
+			
+			module $ N $ where
+			import $ K $
+			
+			module $ M $ where
+			import $ N( f ) $ as $ Q $ 
+			$f = (f, M.f, Q.f,  \setminus f  -> f) $
+		\end{block}
+
 \end{frame}
 
 \begin{frame}{Provera tipa i prečišćavanje}
-	Provera tipa:
+	\begin{itemize}
+	\item Provera tipa:
 	\begin{itemize}
 		\item Provera programa
 		\item Definisanje apstraktne sintakse
 		\item Interfejs typechecker-a 
 		\item Funkcije tcRnModule i tcRnModuleTcRnM 
 	\end{itemize}
+	\end{itemize}
 	
 	\vspace{0.5cm}
-	
-	Prečišćavanje \begin{itemize}
-		\item prevod iz HsSyn tipa u GHC-ov međujezik CoreSyn
+	\begin{itemize}
+	\item Prečišćavanje: \begin{itemize}
+		\item Prevod iz HsSyn tipa u GHC-ov međujezik CoreSyn
+	\end{itemize}
 	\end{itemize}
 \end{frame}
 
@@ -175,8 +186,8 @@
 		\item Pravi jednostavan tipizirani lambda račun
 		\item Jednostavan lenji funkcionalni jezik Asembler funkcionalnog jezika
 	\end{itemize}
-	
-	Sastoji od nekoliko elemenata:
+	\begin{itemize}
+		\item Sastoji od nekoliko elemenata:
 	\begin{itemize}
 		\item varijable
 		\item literali
@@ -185,54 +196,41 @@
 		\item lambda apstrakcije
 		\item aplikacije
 	\end{itemize}
+	\end{itemize}
 \end{frame}
 
 \section{Middle end}
 
 \begin{frame}{Middle end i umetanje}
-	Dodatna optimizacija:
 	\begin{itemize}
-		\item  umetanje k\^{o}da (eng. \emph{inlining})
+		\item Dodatna optimizacija:
+		\begin{itemize}
+			\item  umetanje k\^{o}da (eng. \emph{inlining})
 			\begin{itemize}
 				\item ubrzanje  od 20 – 40\% kod funkcionalnih jezika
 				\item ubrzanje od  10 - 15\% kod imperativnih jezika
 			\end{itemize}
-		\item  eliminacija zajedničkih podizraza (eng. \emph{common subexpression elimination})
+			\item  eliminacija zajedničkih podizraza (eng. \emph{common subexpression elimination})
+		\end{itemize}
 	\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Umetanje}
-
-	\begin{itemize}
-		\item  Samoumetanje (eng. \emph{inlining itself})
-			\begin{itemize}
-				\item SGNF (eng. \emph{Weak Head Normal Form (WHNF)})
-				\item Ne-SGNF (eng. \emph{Non-Weak Head Normal Form (Non-WHNF))})
-			\end{itemize}
-		\begin{block}{}
+		\begin{block}{Samoumetanje (eng. \emph{inlining itself})}
 			let $  f = \setminus x -> x*3  $ in $  f (a + b) - c $
-			\\$ \implies [inline f] $
+			\\$ \implies [inline \hspace{1mm} f] $
 			\\let $  f = \setminus x -> x*3  $ in $ (\setminus x -> x*3) (a + b) - c $
 		\end{block}
-	\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Umetanje}
-	
-	\begin{itemize}
-		\item Eliminacija mrtvog k\^{o}da (eng. \emph{dead code elimination}) 
-		\begin{block}{}
+		\begin{block}{Eliminacija mrtvog k\^{o}da (eng. \emph{dead code elimination}) }
 			let  $ f = \setminus x -> x*3 $ in $ (\setminus x -> x*3) (a + b) - c $
-			\\$ \implies [dead f] $
+			\\$ \implies [dead \hspace{1mm} f] $
 			\\$ (\setminus x -> x*3) (a + b) - c $
 		\end{block}
-		\item $\beta$  redukcija (eng. \emph{beta reduction})
-		\begin{block}{}
+		\begin{block}{$\beta$  redukcija (eng. \emph{beta reduction})}
 		$ (\setminus x -> x*3) (a + b) - c $
 		$ \implies [beta] $
-		$ (let { x = a+b } in x*3) - c $
+		$ (let  \hspace{1mm}  \{ x = a+b \}  \hspace{1mm}  in  \hspace{1mm}  x*3) - c $
 		\end{block}
-	\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Transformacije uslova}
@@ -256,10 +254,8 @@
 \end{frame}
 
 \begin{frame}[fragile]{Pridruživanje tačaka}
-	\begin{itemize}
-		\item Tehnika za redukciju k\^{o}da\\
 		
-		\item Sada, primenjujući (novu) “case-case” transformaciju, dobijamo:
+		Sada, primenjujući (novu) “case-case” transformaciju, dobijamo:
 		\begin{block}{}
 			let e1 = E1 ; e2 = E2 \\
 			in case x of \\
@@ -267,23 +263,23 @@
 			False $ \rightarrow $ case y of {True $ \rightarrow $ e1; False $ \rightarrow $ e2}
 		\end{block}
 		
-		\item Očigledno je sledeće pojednostavljenje, tj. vršimo transformaciju “poznatih-konstruktora”
+		Dalje vršimo transformaciju “poznatih-konstruktora”
 		\begin{block}{}
 			let e1 = E1 \\
 			in case x of \\
 			True $ \rightarrow $ e1 \\
 			False $ \rightarrow $ case y of {True $ \rightarrow $ e1; False $ \rightarrow $ E2}
 		\end{block}
-	\end{itemize}
 \end{frame}
 
 \section{Backend}
 
 \begin{frame}{Backend}
 
-	Prevođenje \textit{CoreSyn} u \textit{StgSyn (GHC’s intermediate language)}, i to u dve faze:
 	\begin{itemize}
-		\item CorePrep 
+		\item 	Prevođenje \textit{CoreSyn} u \textit{StgSyn (GHC’s intermediate language)}, i to u dve faze:
+		\begin{itemize}
+			\item CorePrep 
 			\begin{itemize}
 				\item A-normalna forma (eng. \emph{A-normal form (ANF)}) -  Sabry i Fellisen 1992. godine.
 				Na primer:
@@ -295,43 +291,46 @@
 				\end{block}
 				
 			\end{itemize} 
-		\item CoreToStg
+			\item CoreToStg
+		\end{itemize}
+		
+		\vspace{0.5cm}
+		
+		\item STG program se pomoću generatora k\^{o}da pretvara u C-\,-.
 	\end{itemize}
-	
-	\vspace{0.5cm}
-	
-	STG program se pomoću generatora k\^{o}da pretvara u C-\,-.
+
 \end{frame}
 
 \begin{frame}{GHC k\^{o}d generator}
 	
-	Ideja:
-	
 	\begin{itemize}
-		\item Problemi sa prevođenjem na C
-		\item Podrška za k\^{o}d generatore niskog nivoa
-		\item Razvoj jezika srednje-niskog nivoa
-	\end{itemize}
-	
-	Najznačajniji programi za generisanje izvršnog k\^{o}da::
-	
-	\begin{itemize}
-		\item  NGC (eng. \emph{Native Generated Code})%: kao prvo rešenje odgovara generisanju asemblerskog k\^{o}da. To se pokazalo kao brzo i efikasno rešenje, ali je imalo i veliki nedostatak, jer se za svaku platformu računara (x86, SPARC, PowerPC, ...) morao održavati pripadni asemblerski k\^{o}d.
-%		NCG sadrži 20,570 linija k\^{o}da, što je približno 4 puta više od veličine k\^{o}da C-kompajlera. Pritom je kompilacija bila dvostruko brža. Jedna od prednosti NCG u odnosu na C je jednostavnost; iako je NCG k\^{o}d mnogo veći, sigurno je i mnogo jednostavniji.
-		\item  C-\,- %: drugo rešenje se našlo u programskom jeziku C-\,-, podskupu jezika C, specijalno prilagođenom zadacima kompilacije. Jedna od apstrakcija koju C-\,- nudi su virtualni registri. Oni omogućavaju mapiranje mašinskih registara na optimalan način. Delimično u tome učestvuje i run-time verzija GHC-a. C-\,- verzija kompajlera se znatno razlikuje od zvaničnog C-\,- standarda. Osnovna razlika je u  implementaciji sopstvenog GC-a (eng. Garbage Collector), jer Haskel zahteva GC koji je generacijski i koji može da radi po blokovima hipa odnosno steka. Generacijski GC polazi od pretpostavke da će najnoviji objekti biti najbrže skidani sa hipa odnosno steka, stoga se GC primenjuje samo na najmlađu generaciju objekata, a tek kada to ne daje zadovoljavajući rezultat, onda se analiziraju i starije generacije. Na slici \ref{fig:cmm} je prikazan k\^{o}d u C-\,- koji, očigledno, u velikoj meri liči na C k\^{o}d. 
-		\item LLVM %: trenutno je najperspektivniji bekend frejmvork-okvir (eng. \emph{framework}), koji dolazi sa just-in-time kompilacijom (kojom se kompajliraju samo delovi k\^{o}da koji su ispravljani nakon poslednjeg kompajliranja) kao i life-long analizom (dubinskom analizom za dobijanje optimalnog k\^{o}da).
+		\item Ideja:
 		
+		\begin{itemize}
+			\item Problemi sa prevođenjem na C
+			\item Podrška za k\^{o}d generatore niskog nivoa
+			\item Razvoj jezika srednje-niskog nivoa
+		\end{itemize}
 	\end{itemize}
-	
+
+	\begin{itemize}
+		\item Najznačajniji programi za generisanje izvršnog k\^{o}da::
+		
+		\begin{itemize}
+			\item NGC (eng. \emph{Native Generated Code})
+			\item LLVM
+			
+		\end{itemize}
+	\end{itemize}
 	
 \end{frame}
 
 \begin{frame}[fragile]{LLVM - razlozi implementacije}
 	\begin{itemize}
-		\item Potreba za pravljenjem kompajlera visokih performansi za generisanje k\^{o}da.
+		\item Potreba za pravljenjem kompajlera visokih performansi za generisanje k\^{o}da
 		\item GHC proizvodi Haskel programe koji se brzo izračunavaju
-		\item Prilagođavanje svake nove verzije LLVM-a postojećoj aplikaciji GHC-a. 
-		\item Uključuje celokupan lanac alata. 
+		\item Prilagođavanje svake nove verzije LLVM-a postojećoj aplikaciji GHC-a
+		\item Uključuje celokupan lanac alata
 	\end{itemize}
 
 \end{frame}
@@ -347,6 +346,16 @@
 			\label{tab:vremena}
 		\end{center}
 	\end{table}
+\end{frame}
+
+\begin{frame}[fragile]{Literatura}
+	\begin{itemize}
+		\item Edgewall Software. The Glasgow Haskell, Current Status, 2018. on-line: https://ghc.haskell.org/trac/ghc
+		\item Stanford University. Why is haskell difficult, 2018. \\on-line: http://www.scs.stanford.edu/11au-cs240h/notes/ghc.html
+		\item Simon Marlow (editor). Haskell 2010 Language Report. Haskell community, April 2010
+		
+		
+	\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Kraj}
