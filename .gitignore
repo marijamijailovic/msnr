@@ -6,3 +6,7 @@
 *.synctex.gz
 *.bbl
 *.blg
+*.bib
+*.nav
+*.snm
+*.vrb

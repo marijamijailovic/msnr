@@ -156,7 +156,11 @@
 			
 			module $ M $ where
 			import $ N( f ) $ as $ Q $ 
-			$f = (f, M.f, Q.f,  \setminus f  -> f) $
+			$f = (f, M.f, Q.f,  \setminus f  \rightarrow f) $
+		\end{block}
+	
+		\begin{block}{Rezultat preimenovanja modula M je:}
+		$ 	M.f = (M.f, M.f, K.f, \setminus f_{22} \rightarrow f_{22}) $
 		\end{block}
 
 \end{frame}
@@ -217,12 +221,12 @@
 
 \begin{frame}[fragile]{Umetanje}
 		\begin{block}{Samoumetanje (eng. \emph{inlining itself})}
-			let $  f = \setminus x -> x*3  $ in $  f (a + b) - c $
+			let $  \{f = \setminus x -> x*3 \} $ in $  f (a + b) - c $
 			\\$ \implies [inline \hspace{1mm} f] $
-			\\let $  f = \setminus x -> x*3  $ in $ (\setminus x -> x*3) (a + b) - c $
+			\\let $  \{f = \setminus x -> x*3 \}  $ in $ (\setminus x -> x*3) (a + b) - c $
 		\end{block}
 		\begin{block}{Eliminacija mrtvog k\^{o}da (eng. \emph{dead code elimination}) }
-			let  $ f = \setminus x -> x*3 $ in $ (\setminus x -> x*3) (a + b) - c $
+			let  $ \{f = \setminus x -> x*3 \} $ in $ (\setminus x -> x*3) (a + b) - c $
 			\\$ \implies [dead \hspace{1mm} f] $
 			\\$ (\setminus x -> x*3) (a + b) - c $
 		\end{block}
@@ -242,12 +246,12 @@
 
 	Ovde je $ || $ je operator disjunkcije, definisan sa:
 	\begin{block}{}
-	$ || $ = $ \setminus $ a b $ \rightarrow $ case a of {True $ \rightarrow $ True; False $ \rightarrow $ b}
+	$ || $ = $ \setminus $ a b $ \rightarrow $ case a of \{True $ \rightarrow $ True; False $ \rightarrow $ b\}
 	\end{block}
 
 	Jednostavno izvršimo “case-case” transformacije:
 	\begin{block}{}
-		case (case x of {True $ \rightarrow $ True ; False $ \rightarrow $ y}) of\\
+		case (case x of \{True $ \rightarrow $ True ; False $ \rightarrow $ y\}) of\\
 		True $ \rightarrow $ E1\\
 		False $ \rightarrow $ E2
 	\end{block}
@@ -259,8 +263,8 @@
 		\begin{block}{}
 			let e1 = E1 ; e2 = E2 \\
 			in case x of \\
-			True $ \rightarrow $ case True of {True $ \rightarrow $ e1; False $ \rightarrow $ e2} \\
-			False $ \rightarrow $ case y of {True $ \rightarrow $ e1; False $ \rightarrow $ e2}
+			True $ \rightarrow $ case True of \{True $ \rightarrow $ e1; False $ \rightarrow $ e2\} \\
+			False $ \rightarrow $ case y of \{True $ \rightarrow $ e1; False $ \rightarrow $ e2\}
 		\end{block}
 		
 		Dalje vršimo transformaciju “poznatih-konstruktora”
@@ -268,7 +272,7 @@
 			let e1 = E1 \\
 			in case x of \\
 			True $ \rightarrow $ e1 \\
-			False $ \rightarrow $ case y of {True $ \rightarrow $ e1; False $ \rightarrow $ E2}
+			False $ \rightarrow $ case y of \{True $ \rightarrow $ e1; False $ \rightarrow $ E2\}
 		\end{block}
 \end{frame}
 
@@ -314,12 +318,12 @@
 	\end{itemize}
 
 	\begin{itemize}
-		\item Najznačajniji programi za generisanje izvršnog k\^{o}da::
+		\item Najznačajniji programi za generisanje izvršnog k\^{o}da:
 		
 		\begin{itemize}
 			\item NGC (eng. \emph{Native Generated Code})
-			\item LLVM
-			
+			\item LLVM (eng. \emph{Low-Level Virtual Machine})
+			\item C-\,-
 		\end{itemize}
 	\end{itemize}
 	
@@ -332,20 +336,29 @@
 		\item Prilagođavanje svake nove verzije LLVM-a postojećoj aplikaciji GHC-a
 		\item Uključuje celokupan lanac alata
 	\end{itemize}
-
-\end{frame}
-
-\begin{frame}[fragile]{Zaključak}
+	
 	\begin{table}[h!]
 		\begin{center}
-			\caption{Različita vremena generisanja izvršnih k\^{o}dova}
 			\begin{tabular}{||c|c|c|c||} \hline
 				GHC-6.13 (NCG) & GHC-6.13 (C) & GHC-6.13 (LLVM) & GCC-4.4.3 \\ \hline
 				2.876s & 0.576s & 0.516s & 0.335s \\ \hline
 			\end{tabular}
+			\caption{Različita vremena generisanja izvršnih k\^{o}dova}
 			\label{tab:vremena}
 		\end{center}
 	\end{table}
+	
+\end{frame}
+
+\begin{frame}[fragile]{Zaključak}
+	\begin{itemize}
+		\item GHC kompajler je u stalnom razvoju:
+		\begin{itemize}
+			\item strategije izvođenja
+			\item generacijskog garbage collector-a
+			\item prekoračenja heap memorije
+		\end{itemize}
+	\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Literatura}
